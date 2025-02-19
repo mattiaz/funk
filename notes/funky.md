@@ -87,7 +87,8 @@ while (i < 100) {
 ```
 
 ## Functions
-Functions in Funk can be assigned to variables or used as anonymous expressions. They are defined in two parts, arguments and code block, If no arguments are given, functions can be used without it.
+Functions in Funk can be assigned to variables or used as anonymous expressions. They are defined in two parts,
+arguments and code block, If no arguments are given, functions can be used without it.
 
 ### Function Declaration
 ```funk
@@ -128,7 +129,8 @@ funk print = (text x) { ... };
 
 ## Piping & Function Chaining
 
-Funk supports function chaining via the `>>` operator. This allows the output of one function to become the input of the next:
+Funk supports function chaining via the `>>` operator. This allows the output of one function to become the input of
+the next:
 
 ```funk
 numb total = add(10, 2) >> add(5) >> (numb sum) { return sum * 10 };
