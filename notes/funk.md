@@ -1,120 +1,147 @@
 # Funk - Placeholder name
 
 ## Syntax and Code Style
-
 ```funk
-# This is a example program written in FunkCode
-# Comments can be made with #
+# Example program written in FunkCode
+# Single-line comments use "#"
 
 ##
-Multiline comments can be made with 2 #.
-The first occuring 2 # is used as end of block.
+Multiline comments use double "#".
+The first occurrence of "##" marks the end of the block.
 ##
 
-funk add = (numb x, numb y) {return x + y};
-funk sub = (numb x, numb y) {return x - y};
+funk add = (numb x, numb y) { return x + y };
+funk sub = (numb x, numb y) { return x - y };
 
 funk main = {
-    mut numb res = add(1,2);
-    numb = sub(numb, 1);
+    mut numb res = add(1, 2);
+    res = sub(res, 1);
 };
 
 main();
 ```
 
-## Datatypes
+## Data Types
+Funk is statically typed, requiring explicit type declarations for all variables. The auto keyword may be introduced for
+type inference in the future.
 
-### Simple
+### Primitive Types
+- `numb`: Integer values.
+- `real`: Floating-point values (uses . as the decimal separator).
+- `bool`: Boolean values (true, false).
+- `char`: Single-character values (enclosed in single quotes, e.g., 'c').
+- `none`: Represents an absence of value.
 
-- `numb`: Integer
-- `real`: Floating point number
-- `bool`: Boolean (true, false)
-- `char`: Character
+### Composite Types
+- `text`: A sequence of char values (strings). Implemented natively or in Funk.
+- `list`: A collection of values, using angle brackets to specify type (list<numb>).
 
-- `void`: No return type
-- `none`: Null/None value, not the same as void
+## Variables & Immutability
+All variables are immutable by default. To allow mutation, use the `mut` keyword:
+```funk
+mut numb counter = 0;
+counter = counter + 1;
+```
 
-### Composite
-
-- `text`: List of chars
-- `list`: Array/Vector of multiple values of the same type
-
-## Variables & References
-
-All variables are immutable as default, the keyword `mut` can be added before the datatype to make it mutable.
-
-Funktions returning data transfers ownership of this data to either a variable or another function.
+Funk enforces ownership transfer in function return values. This means reassignment requires creating a new variable:
+```funk
+list<numb> numbs = [1, 2, 3];
+list<numb> new_numbs = numbs.push(4);
+```
 
 ## Control Structures
 
-To branch the following keywords are available: `if`, `else if`, `else` and `match` with multiple `case`.
-
-Keywords are followed by a `(condition == true)` and the code block. Example:
+### Conditional Statements
+Funk supports if, else if, and else for branching logic:
 ```funk
-if ( x < y )
-{
-}
-else if ( x == y )
-{
-}
-else
-{
+if (x < y) {
+    print("x is less than y");
+} else if (x == y) {
+    print("x equals y");
+} else {
+    print("x is greater than y");
 }
 ```
 
-Match can only be used for simple datatypes and is used as following:
+### Pattern Matching
+Pattern matching with match simplifies multiple conditional checks. It is restricted to primitive types:
 ```funk
-match ( x )
-{
-    case ( 1 ) {}
-    case ( 2 ) {}
-    case ( 3 )
-    case ( 4 )
-    case ( 5 ) {}
-    none       {}
+match (x) {
+    case (1) { print("One"); }
+    case (2) { print("Two"); }
+    case (3)
+    case (4)
+    case (5) { print("Three, Four, or Five"); }
+    none     { print("Unknown value"); }
 }
 ```
 
-For iteration and loops only `while` is available. Complex datatypes such as list might implement an each function, but
-this in turn uses while. Example:
+### Loops
+Funk provides only `while` loops. Collections may implement `.each()` for iteration:
 
 ```funk
 mut numb i = 0;
-while (i < 100)
-{
+while (i < 100) {
     i += 1;
 }
 ```
 
 ## Functions
+Functions in Funk can be assigned to variables or used as anonymous expressions. They are defined in two parts,
+arguments and code block, If no arguments are given, functions can be used without it.
 
-Functions are defined in two parts, arguments and block to execute. Arguments is defined as `(bool x, real y)`.
-Following the arguments `{}` are used to define the block of the function. If no arguments are given, argument
-parenthesis can be ignored.
-
-All functions are of the "type" `funk` and can either be stored as a "variable" or be executed anonymously. This
-combines lambda functions with regular functions to reduce complexity.
-
-Example function definition and execution:
+### Function Declaration
 ```funk
 funk add = (numb a, numb b) { return a + b };
-numb a = 10;
-numb b = 20;
+```
 
-add(a, b);
-add(1, 2);
-add(10, add(20, 30));
+### Function Execution
+```funk
+numb result = add(10, 5);
+numb nested = add(10, add(20, 30));
+```
+
+### Anonymous Functions
+```funk
 add(1, { return rand() * 100 });
+```
+
+### Pattern Matching in Functions
+
+Pattern matching can be used for declarative function definitions:
+```funk
+funk factorial = (0) { return 1 };
+funk factorial = (numb n) { return n * factorial(n - 1) };
+```
+
+### Implicit Returns (Lambda Syntax)
+Might be implemented later.
+```funk
+funk double = (x) -> x * 2;
+```
+
+### Function Overloading
+Overloading allows functions to be defined with different type signatures:
+```funk
+funk print = (numb x) { ... };
+funk print = (text x) { ... };
 ```
 
 ## Piping & Function Chaining
 
-All functions can be "piped" to other functions where the return value will be passed to the next one in the chain.
+Funk supports function chaining via the `>>` operator. This allows the output of one function to become the input of
+the next:
 
-An example is the following:
 ```funk
-numb total = add(10, 2) >> add(5) >> (numb sum){ return sum * 10 };
-list<text> result = fetch_data() >> filter() >> sort();
+numb total = add(10, 2) >> add(5) >> (numb sum) { return sum * 10 };
+list<text> sorted_results = fetch_data() >> filter() >> sort();
 ```
 
-Longer chains can be split on multiple rows beginning with `>>` for each new row.
+For readability, chains can be split across multiple lines:
+
+```funk
+fetch_data()
+    >> filter()
+    >> sort()
+    >> (list<text> lst) { lst.each((text line) { line >> print(); }) };
+```
