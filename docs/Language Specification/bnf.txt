@@ -1,0 +1,88 @@
+<program>       -> <statement>*
+
+<statement>     -> <declaration>
+                | <expression> ';'
+                | <control>
+                | <comment>
+
+<comment>       -> '#' <wildcard>* <newline> | '##' <wildcard>* '##'
+
+<declaration>   -> <variable_decl> | <function_decl> | <data_decl>
+<variable_decl> -> ['mut'] <type> <identifier> '=' <expression> ';'
+<function_decl> -> ['mut'] 'funk' <identifier> '=' <function_def> ';'
+<data_decl>     -> 'data' <identifier> [<generics>] <data_block> ';'
+
+<function_def>  -> [ '(' [<param_list>] ')' ] <block> | '(' <literal> ')' <block>
+<param_list>    -> <param> [',' <param>]*
+<param>         -> <type> <identifier>
+<block>         -> '{' <statement>* '}'
+
+<generics>      -> '<' <identifier> [',' <identifier>]* '>'
+<data_block>    -> '{' [<data_member>]* '}'
+<data_member>   -> ['mut'] <type> <identifier> ['=' <expression>] ';'
+                | 'funk' <identifier> '=' <function_def> ';'
+
+<control>       -> <if_stmt> | <while_stmt> | <match_stmt> | <return_stmt>
+
+<if_stmt>       -> 'if' '(' <expression> ')' <block> ['else' <else_part>]
+<else_part>     -> <if_stmt> | <block>
+
+<while_stmt>    -> 'while' '(' <expression> ')' <block>
+
+<match_stmt>    -> 'match' '(' <expression> ')' '{' <case_list> '}'
+<case_list>     -> <case>*
+<case>          -> 'case' '(' <expression> ')' <block> | 'none' <block>
+
+<return_stmt>   -> 'return' <expression> ';'
+
+<expression>    -> <assignment> ['>>' <pipe_target>]*
+<pipe_target>   -> <identifier> | <call> | <anonymous_function>
+<anonymous_function> -> '(' [<param_list>] ')' <block>
+
+<assignment>    -> <logical_or> [<assignment_op> <expression>]
+<assignment_op> -> '=' | '+=' | '-=' | '*=' | '/='
+
+<logical_or>    -> <logical_and> ['||' <logical_and>]*
+<logical_and>   -> <equality> ['&&' <equality>]*
+<equality>      -> <comparison> [('==' | '!=') <comparison>]*
+<comparison>    -> <additive> [('<' | '>' | '<=' | '>=') <additive>]*
+<additive>      -> <multiplicative> [('+' | '-') <multiplicative>]*
+<multiplicative> -> <unary> [('*' | '/' | '%') <unary>]*
+<unary>         -> ('!' | '-') <unary> | <factor>
+
+<factor>        -> <literal>
+                | <identifier>
+                | <call>
+                | <list_literal>
+                | '(' <expression> ')'
+
+<call>          -> <identifier> '(' [<argument_list>] ')'
+<argument_list> -> <expression> [',' <expression>]*
+
+<list_literal>  -> '[' [<expression> [',' <expression>]*] ']'
+
+<literal>       -> <number> | <boolean> | <char> | 'none' | <text>
+<number>        -> <integer> | <real>
+<integer>       -> <digit>*
+<real>          -> <digit>* '.' <digit>*
+<boolean>       -> 'TRUE' | 'FALSE'
+<char>          -> '\'' <wildcard> '\''
+<text>          -> '"' <wildcard>* '"'
+
+<type>          -> 'numb'
+                | 'real'
+                | 'bool'
+                | 'char'
+                | 'none'
+                | 'text'
+                | 'list' '<' <type> '>'
+                | <identifier>
+                | <identifier> '<' <type> [ ',' <type> ]* '>'
+
+<identifier>    -> <letter> [ <letter> | <digit> | '_' ]*
+<wildcard>      -> <digit> | <letter> | <other>
+
+<newline>       -> '\n'
+<digit>         -> R'0-9'
+<letter>        -> R'a-zA-Z'
+<other>         -> R'.'
