@@ -1,0 +1,34 @@
+---
+Language:                             Cpp         # C++
+BasedOnStyle:                         LLVM        # https://clang.llvm.org/
+
+UseTab:                               Never       # Force spaces instead of tabs
+IndentWidth:                          4           # Use 4 spaces for indentation
+
+ColumnLimit:                          120         # Max 120 columns per line
+
+BreakBeforeBraces:                    Allman      # Braces on own line
+PointerAlignment:                     Left        # string* foo;
+
+AllowShortBlocksOnASingleLine:        true        # Single line { foo(); }
+AllowShortCaseLabelsOnASingleLine:    true        # Single line case 1: ...
+AllowShortFunctionsOnASingleLine:     Inline      # Single line func def
+AllowShortIfStatementsOnASingleLine:  true        # Sing line if (true) ...
+AllowShortLoopsOnASingleLine:         true        # Single line while (true) ...
+
+KeepEmptyLinesAtTheStartOfBlocks:     false       # Delte empty rows
+MaxEmptyLinesToKeep:                  1           # Max 1 empty line between code
+
+AccessModifierOffset:                 -4          # public:/private: offset
+NamespaceIndentation:                 None        # Indent namespaces by default
+FixNamespaceComments:                 true        # } // namespace MyNamespace
+
+AlwaysBreakAfterDefinitionReturnType: None        # Return type on same line
+AlwaysBreakAfterReturnType:           None        # Return type on same line
+BreakBeforeBinaryOperators:           None        # Keep 1 + 2 on same line
+BreakBeforeTernaryOperators:          true        # Keep ?: on same line
+BreakConstructorInitializers:         AfterColon  # Keep  : on same line
+LambdaBodyIndentation:                OuterScope  # Indent lambda body
+AlignAfterOpenBracket:                DontAlign   # Allow multiple args on line
+AllowShortLambdasOnASingleLine:       None        # Don't allow short lambdas
+...
