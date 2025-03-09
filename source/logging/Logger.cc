@@ -64,10 +64,7 @@ void Logger::file_open()
 {
     if (log_file.is_open()) return;
     log_file.open(log_path, std::ios::app);
-    if (!log_file.is_open())
-    {
-        std::cerr << "ERROR: Could not open log file '" << log_path << "'. Logging to stderr instead." << std::endl;
-    }
+    if (!log_file.is_open()) { std::cerr << "ERROR: Could not open log file '" << log_path << "'.\n"; }
 }
 
 } // namespace funk

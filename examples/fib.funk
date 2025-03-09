@@ -1,0 +1,13 @@
+funk fib = (0) { return 0 };
+funk fib = (1) { return 1 };
+funk fib = (numb n) { return fib(n - 1) + fib(n - 2) };
+
+funk main = {
+    mut numb i = 0;
+    while (i < 100) {
+        fib(i) >> print;
+        i += 1;
+    }
+};
+
+main();
