@@ -308,16 +308,16 @@ bool Lexer::is_alphanumeric(char c) const
 
 Token Lexer::make_token(const String& lexeme, TokenType type) const
 {
-    return Token(filename, line, column, lexeme, type);
+    return Token(SourceLocation(filename, line, column), lexeme, type);
 }
 
 Token Lexer::make_token(const String& lexeme, TokenType type, TokenValue value) const
 {
-    return Token(filename, line, column, lexeme, type, value);
+    return Token(SourceLocation(filename, line, column), lexeme, type, value);
 }
 
 Token Lexer::error_token(const String& lexeme, const String& message) const
 {
-    return Token(filename, line, column, lexeme, TokenType::ERROR, message);
+    return Token(SourceLocation(filename, line, column), lexeme, TokenType::ERROR, message);
 }
 } // namespace funk

@@ -3,13 +3,13 @@
 namespace funk
 {
 
-Token::Token(const String& filename, int line, int column, const String& lexeme, TokenType type) :
-    type(type), lexeme(lexeme), value(std::monostate{}), line(line), column(column), filename(filename)
+Token::Token(const SourceLocation& loc, const String& lexeme, TokenType type) :
+    location(loc), lexeme(lexeme), type(type)
 {
 }
 
-Token::Token(const String& filename, int line, int column, const String& lexeme, TokenType type, TokenValue value) :
-    type(type), lexeme(lexeme), value(value), line(line), column(column), filename(filename)
+Token::Token(const SourceLocation& loc, const String& lexeme, TokenType type, TokenValue value) :
+    location(loc), lexeme(lexeme), type(type), value(value)
 {
 }
 
@@ -28,19 +28,9 @@ TokenValue Token::get_value() const
     return value;
 }
 
-int Token::get_line() const
+SourceLocation Token::get_location() const
 {
-    return line;
-}
-
-int Token::get_column() const
-{
-    return column;
-}
-
-String Token::get_filename() const
-{
-    return filename;
+    return location;
 }
 
 String Token::get_value_str() const
@@ -67,9 +57,9 @@ String Token::to_s() const
     // Include value if it's not monostate
     if (!std::holds_alternative<std::monostate>(value)) { oss << "value=" << get_value_str() << ", "; }
 
-    oss << "line=" << line << ", ";
-    oss << "column=" << column << ", ";
-    oss << "file=\"" << filename << "\"";
+    oss << "line=" << location.line << ", ";
+    oss << "column=" << location.column << ", ";
+    oss << "file=\"" << location.filename << "\"";
     oss << ")";
 
     return oss.str();

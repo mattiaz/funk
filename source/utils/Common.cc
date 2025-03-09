@@ -8,7 +8,7 @@ String read_file(const String& filename)
     std::ifstream file(filename);
     if (!file.is_open()) { throw std::runtime_error("Failed to open file: " + filename); }
     std::stringstream buffer;
-    buffer << file.rdbuf();
+    buffer << file.rdbuf() << '\n';
     return buffer.str();
 }
 
