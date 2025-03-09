@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+using namespace funk;
+
 class TestTemplate : public ::testing::Test
 {
 protected:
