@@ -1,0 +1,31 @@
+#! /usr/bin/env bash
+
+make tests
+
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "❌ Compilation FAILED"
+    exit 1
+fi
+
+all_passed=1
+
+for file in bin/tests/*; do
+    if [ -f "$file" ]; then
+        ./"$file"
+
+        if [ $? -ne 0 ]; then
+            all_passed=0
+        fi
+    fi
+done
+
+echo ""
+
+if [ $all_passed -eq 1 ]; then
+    echo "✔ All tests PASSED"
+    exit 0
+else
+    echo "❌ Some tests FAILED"
+    exit 1
+fi
