@@ -32,24 +32,24 @@ String token_type_to_string(TokenType token)
 
     case TokenType::IDENTIFIER: return "IDENTIFIER";
 
-    case TokenType::PLUS: return "PLUS";
-    case TokenType::MINUS: return "MINUS";
-    case TokenType::MULTIPLY: return "MULTIPLY";
-    case TokenType::DIVIDE: return "DIVIDE";
-    case TokenType::PERCENT: return "PERCENT";
+    case TokenType::PLUS: return "+";
+    case TokenType::MINUS: return "-";
+    case TokenType::MULTIPLY: return "*";
+    case TokenType::DIVIDE: return "/";
+    case TokenType::PERCENT: return "%";
 
-    case TokenType::ASSIGN: return "ASSIGN";
-    case TokenType::PLUS_ASSIGN: return "PLUS_ASSIGN";
-    case TokenType::MINUS_ASSIGN: return "MINUS_ASSIGN";
-    case TokenType::MULTIPLY_ASSIGN: return "MULTIPLY_ASSIGN";
-    case TokenType::DIVIDE_ASSIGN: return "DIVIDE_ASSIGN";
+    case TokenType::ASSIGN: return "=";
+    case TokenType::PLUS_ASSIGN: return "+=";
+    case TokenType::MINUS_ASSIGN: return "-=";
+    case TokenType::MULTIPLY_ASSIGN: return "*=";
+    case TokenType::DIVIDE_ASSIGN: return "/=";
 
-    case TokenType::EQUAL: return "EQUAL";
-    case TokenType::NOT_EQUAL: return "NOT_EQUAL";
-    case TokenType::LESS: return "LESS";
-    case TokenType::GREATER: return "GREATER";
-    case TokenType::LESS_EQUAL: return "LESS_EQUAL";
-    case TokenType::GREATER_EQUAL: return "GREATER_EQUAL";
+    case TokenType::EQUAL: return "==";
+    case TokenType::NOT_EQUAL: return "!=";
+    case TokenType::LESS: return "<";
+    case TokenType::GREATER: return ">";
+    case TokenType::LESS_EQUAL: return "<=";
+    case TokenType::GREATER_EQUAL: return ">=";
 
     case TokenType::OR: return "OR";
     case TokenType::AND: return "AND";
