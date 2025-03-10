@@ -23,6 +23,8 @@ private:
     int line{1};
     int column{1};
 
+    int token_start_col{1};
+
     char next();               // Advance the index and return the character at the new index
     char peek() const;         // Return the character at the current index
     char peek_next() const;    // Return the character at the next index

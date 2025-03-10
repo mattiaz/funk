@@ -42,6 +42,8 @@ Token Lexer::next_token()
 
     char c{peek()};
 
+    token_start_col = column;
+
     if (is_digit(c)) { return get_number(); }
     else if (is_alpha(c)) { return get_identifier(); }
     else if (c == '"') { return get_text(); }
@@ -308,16 +310,16 @@ bool Lexer::is_alphanumeric(char c) const
 
 Token Lexer::make_token(const String& lexeme, TokenType type) const
 {
-    return Token(SourceLocation(filename, line, column), lexeme, type);
+    return Token(SourceLocation(filename, line, token_start_col), lexeme, type);
 }
 
 Token Lexer::make_token(const String& lexeme, TokenType type, TokenValue value) const
 {
-    return Token(SourceLocation(filename, line, column), lexeme, type, value);
+    return Token(SourceLocation(filename, line, token_start_col), lexeme, type, value);
 }
 
 Token Lexer::error_token(const String& lexeme, const String& message) const
 {
-    return Token(SourceLocation(filename, line, column), lexeme, TokenType::ERROR, message);
+    return Token(SourceLocation(filename, line, token_start_col), lexeme, TokenType::ERROR, message);
 }
 } // namespace funk
