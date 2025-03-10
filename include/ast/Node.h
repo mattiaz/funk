@@ -7,7 +7,7 @@ namespace funk
 
 // TODO: This is a idea to simplify node values, implementing a generic literal type
 // not separate it in different classes.
-using NodeValue = std::variant<std::monostate, int, double, bool, char, String, Node*>;
+// using NodeValue = std::variant<std::monostate, int, double, bool, char, String, Node*>;
 
 class Node
 {
