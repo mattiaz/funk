@@ -61,7 +61,7 @@ enum class TokenType
     MINUS_ASSIGN,    ///< Subtract and assign operator (-=)
     MULTIPLY_ASSIGN, ///< Multiply and assign operator (*=)
     DIVIDE_ASSIGN,   ///< Divide and assign operator (/=)
-    PERCENT_ASSIGN,  ///< Modulo and assign operator (%=)
+    MODULO_ASSIGN,   ///< Modulo and assign operator (%=)
 
     // Comparison operators
     EQUAL,         ///< Equality operator (==)

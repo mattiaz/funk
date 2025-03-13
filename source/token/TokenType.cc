@@ -43,6 +43,7 @@ String token_type_to_string(TokenType token)
     case TokenType::MINUS_ASSIGN: return "-=";
     case TokenType::MULTIPLY_ASSIGN: return "*=";
     case TokenType::DIVIDE_ASSIGN: return "/=";
+    case TokenType::MODULO_ASSIGN: return "%=";
 
     case TokenType::EQUAL: return "==";
     case TokenType::NOT_EQUAL: return "!=";
