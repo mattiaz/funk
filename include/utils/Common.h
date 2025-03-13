@@ -20,6 +20,7 @@ namespace funk
 {
 
 using String = std::string;
+using None = std::monostate;
 
 template <typename T> using Vector = std::vector<T>;
 template <typename K, typename V> using HashMap = std::unordered_map<K, V>;

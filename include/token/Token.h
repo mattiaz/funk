@@ -5,7 +5,7 @@
 
 namespace funk
 {
-using TokenValue = std::variant<std::monostate, int, double, bool, char, String>;
+using TokenValue = std::variant<int, double, bool, char, String, None>;
 
 class Token
 {

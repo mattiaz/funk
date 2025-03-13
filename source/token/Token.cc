@@ -55,7 +55,7 @@ String Token::to_s() const
     oss << "lexeme=\"" << lexeme << "\", ";
 
     // Include value if it's not monostate
-    if (!std::holds_alternative<std::monostate>(value)) { oss << "value=" << get_value_str() << ", "; }
+    if (!std::holds_alternative<None>(value)) { oss << "value=" << get_value_str() << ", "; }
 
     oss << "line=" << location.line << ", ";
     oss << "column=" << location.column << ", ";

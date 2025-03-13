@@ -19,12 +19,6 @@ protected:
     SourceLocation location;
 };
 
-class FileError : public FunkError
-{
-public:
-    FileError(const SourceLocation& loc, const String& message) : FunkError(loc, "File error", message) {}
-};
-
 class LexerError : public FunkError
 {
 public:
