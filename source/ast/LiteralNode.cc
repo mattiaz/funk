@@ -12,7 +12,7 @@ Node* LiteralNode::evaluate()
 
 String LiteralNode::to_s() const
 {
-    return std::get<String>(value);
+    return cast<String>();
 }
 
 NodeValue LiteralNode::get_value() const
