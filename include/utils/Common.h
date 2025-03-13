@@ -12,7 +12,6 @@
 #include <vector>
 
 #include <algorithm>
-#include <stdexcept>
 
 using std::cerr;
 using std::cout;
