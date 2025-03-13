@@ -3,7 +3,7 @@
 namespace funk
 {
 
-String token_type_to_string(TokenType token)
+String token_type_to_s(TokenType token)
 {
     switch (token)
     {
@@ -36,7 +36,8 @@ String token_type_to_string(TokenType token)
     case TokenType::MINUS: return "-";
     case TokenType::MULTIPLY: return "*";
     case TokenType::DIVIDE: return "/";
-    case TokenType::PERCENT: return "%";
+    case TokenType::MODULO: return "%";
+    case TokenType::POWER: return "^";
 
     case TokenType::ASSIGN: return "=";
     case TokenType::PLUS_ASSIGN: return "+=";
@@ -44,6 +45,7 @@ String token_type_to_string(TokenType token)
     case TokenType::MULTIPLY_ASSIGN: return "*=";
     case TokenType::DIVIDE_ASSIGN: return "/=";
     case TokenType::MODULO_ASSIGN: return "%=";
+    case TokenType::POWER_ASSIGN: return "^=";
 
     case TokenType::EQUAL: return "==";
     case TokenType::NOT_EQUAL: return "!=";

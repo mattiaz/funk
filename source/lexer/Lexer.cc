@@ -64,7 +64,8 @@ Token Lexer::next_token()
     case ',': return make_token(lexeme, TokenType::COMMA);
     case '.': return make_token(lexeme, TokenType::DOT);
     case ';': return make_token(lexeme, TokenType::SEMICOLON);
-    case '%': return make_token(lexeme, TokenType::PERCENT);
+    case '%': return make_token(lexeme, TokenType::MODULO);
+    case '^': return make_token(lexeme, TokenType::POWER);
 
     case '+':
         if (match('=')) { return make_token(lexeme + '=', TokenType::PLUS_ASSIGN); }

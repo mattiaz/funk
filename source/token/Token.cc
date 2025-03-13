@@ -51,7 +51,7 @@ String Token::to_s() const
 {
     std::ostringstream oss;
     oss << "Token(";
-    oss << "type=" << token_type_to_string(type) << ", ";
+    oss << "type=" << token_type_to_s(type) << ", ";
     oss << "lexeme=\"" << lexeme << "\", ";
 
     // Include value if it's not monostate

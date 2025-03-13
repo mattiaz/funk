@@ -4,17 +4,12 @@
  */
 #pragma once
 
+#include "ast/NodeValue.h"
 #include "utils/Common.h"
 #include "utils/Exception.h"
 
 namespace funk
 {
-
-/**
- * @brief Variant type that can hold any of the primitive values in Funk.
- * Represents the possible runtime values that a node in the AST can evaluate to.
- */
-using NodeValue = std::variant<int, double, bool, char, String, None>;
 
 /**
  * @brief Abstract base class for all AST nodes in the Funk language.
@@ -38,7 +33,7 @@ public:
      * @brief Evaluates the node and returns the result.
      * @return Pointer to the node representing the evaluation result
      */
-    virtual Node* evaluate() = 0;
+    virtual Node* evaluate() const = 0;
 
     /**
      * @brief Converts the node to a string representation.
@@ -53,7 +48,8 @@ public:
     SourceLocation get_location() const;
 
 protected:
-    SourceLocation location; ///< Source location where this node appears in the code
+    SourceLocation location;            ///< Source location where this node appears in the code
+    mutable Node* cached_eval{nullptr}; ///< Cached evaluation result
 };
 
 } // namespace funk

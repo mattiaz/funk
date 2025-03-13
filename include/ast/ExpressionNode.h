@@ -32,41 +32,6 @@ public:
      * @return The evaluated value of this expression
      */
     virtual NodeValue get_value() const = 0;
-
-    /**
-     * @brief Checks if the expression's value is of a specific type.
-     * @tparam T The type to check for
-     * @return True if the value is of type T
-     */
-    template <typename T> bool is_a() const;
-
-    /**
-     * @brief Gets the expression's value as a specific type.
-     * @tparam T The type to retrieve
-     * @return The value as type T
-     * @throws TypeError if the value is not of type T
-     */
-    template <typename T> T get() const;
-
-    /**
-     * @brief Casts the expression's value to a specific type.
-     * @tparam T The type to cast to
-     * @return The value cast to type T
-     * @throws TypeError if the value cannot be cast to type T
-     */
-    template <typename T> T cast() const;
-
-    /**
-     * @brief Checks if the expression's value is numeric (int or double).
-     * @return True if the value is numeric
-     */
-    bool is_numeric() const;
-
-    /**
-     * @brief Checks if the expression's value is Nothing (None).
-     * @return True if the value is Nothing
-     */
-    bool is_nothing() const;
 };
 
 } // namespace funk

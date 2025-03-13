@@ -53,7 +53,8 @@ enum class TokenType
     MINUS,    ///< Subtraction operator (-)
     MULTIPLY, ///< Multiplication operator (*)
     DIVIDE,   ///< Division operator (/)
-    PERCENT,  ///< Modulo operator (%)
+    MODULO,   ///< Modulo operator (%)
+    POWER,    ///< Power operator (^)
 
     // Assignment operators
     ASSIGN,          ///< Assignment operator (=)
@@ -62,6 +63,7 @@ enum class TokenType
     MULTIPLY_ASSIGN, ///< Multiply and assign operator (*=)
     DIVIDE_ASSIGN,   ///< Divide and assign operator (/=)
     MODULO_ASSIGN,   ///< Modulo and assign operator (%=)
+    POWER_ASSIGN,    ///< Power and assign operator (^=)
 
     // Comparison operators
     EQUAL,         ///< Equality operator (==)
@@ -104,5 +106,5 @@ enum class TokenType
  * @param token The token type to convert
  * @return A string representation of the token type
  */
-String token_type_to_string(TokenType token);
+String token_type_to_s(TokenType token);
 } // namespace funk

@@ -59,3 +59,6 @@ format:
 	find $(SRC_DIR) $(INC_DIR) $(TEST_DIR) -name "*.cc" -o -name "*.h" | xargs clang-format -i
 
 .PHONY: all clean format directories lib tests
+
+# Compile on all cores
+MAKEFLAGS += -j$(shell nproc)

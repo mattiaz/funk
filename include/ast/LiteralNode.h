@@ -27,7 +27,7 @@ public:
      * @brief Evaluates the literal node.
      * @return Pointer to the node representing the evaluation result (self for literals)
      */
-    Node* evaluate() override;
+    Node* evaluate() const override;
 
     /**
      * @brief Converts the literal to a string representation.
