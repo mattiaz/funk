@@ -130,4 +130,8 @@ NodeValue operator||(const NodeValue& lhs, const NodeValue& rhs);
 // Power operation
 NodeValue pow(const NodeValue& lhs, const NodeValue& rhs);
 
+// Unary operators
+NodeValue operator-(const NodeValue& val);
+NodeValue operator!(const NodeValue& val);
+
 } // namespace funk

@@ -216,6 +216,20 @@ NodeValue pow(const NodeValue& lhs, const NodeValue& rhs)
     else { return std::pow(lhs.cast<double>(), rhs.cast<double>()); }
 }
 
+NodeValue operator-(const NodeValue& val)
+{
+    if (!val.is_numeric()) { throw TypeError("Cannot negate non-numeric value"); }
+
+    if (val.is_a<int>()) { return -val.get<int>(); }
+    return -val.cast<double>();
+}
+
+NodeValue operator!(const NodeValue& val)
+{
+    if (!val.is_a<bool>()) { throw TypeError("Cannot apply logical NOT to non-boolean value"); }
+    return !val.get<bool>();
+}
+
 template bool NodeValue::is_a<int>() const;
 template bool NodeValue::is_a<double>() const;
 template bool NodeValue::is_a<bool>() const;
