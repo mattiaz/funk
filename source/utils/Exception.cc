@@ -15,6 +15,8 @@ const SourceLocation& FunkError::get_location() const
 
 String FunkError::trace() const
 {
+    if (location.filename.empty()) { return what(); }
+
     std::ostringstream os;
     os << type << " in file " << location.filename << " at line " << location.line << ", column " << location.column
        << '\n';

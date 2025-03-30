@@ -107,4 +107,18 @@ public:
     RuntimeError(const String& message) : FunkError(SourceLocation{"", 0, 0}, "Runtime error", message) {}
 };
 
+/**
+ * @brief Exception class for file-related errors.
+ * Thrown when there is an issue with file operations.
+ */
+class FileError : public std::runtime_error
+{
+public:
+    /**
+     * @brief Constructs a FileError with message.
+     * @param message Description of the error
+     */
+    FileError(const String& message) : std::runtime_error(message) {}
+};
+
 } // namespace funk
