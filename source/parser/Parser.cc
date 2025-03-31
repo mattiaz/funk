@@ -219,10 +219,10 @@ Node* Parser::parse_unary()
 Node* Parser::parse_factor()
 {
     LOG_DEBUG("Parse factor");
-    if (match(TokenType::IDENTIFIER))
+    if (check(TokenType::IDENTIFIER))
         return parse_identifier();
-    else if (match(TokenType::NUMB) || match(TokenType::REAL) || match(TokenType::BOOL) || match(TokenType::CHAR) ||
-             match(TokenType::TEXT))
+    else if (check(TokenType::NUMB) || check(TokenType::REAL) || check(TokenType::BOOL) || check(TokenType::CHAR) ||
+             check(TokenType::TEXT))
     {
         return parse_literal();
     }
@@ -239,7 +239,8 @@ Node* Parser::parse_factor()
 Node* Parser::parse_literal()
 {
     LOG_DEBUG("Parse literal");
-    return new LiteralNode(peek_prev().get_location(), NodeValue(peek_prev().get_value()));
+    Token literal{next()};
+    return new LiteralNode(literal.get_location(), NodeValue(literal.get_value()));
 }
 
 Node* Parser::parse_identifier()
