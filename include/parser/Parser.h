@@ -13,6 +13,7 @@
 #include "ast/BinaryOpNode.h"
 #include "ast/LiteralNode.h"
 #include "ast/Node.h"
+#include "ast/ProgramNode.h"
 #include "ast/UnaryOpNode.h"
 
 namespace funk

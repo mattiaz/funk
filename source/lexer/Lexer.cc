@@ -37,12 +37,11 @@ Vector<Token> Lexer::tokenize()
 Token Lexer::next_token()
 {
     skip_whitespace();
+    token_start_col = column;
 
     if (done()) { return make_token("", TokenType::EOF_TOKEN); }
 
     char c{peek()};
-
-    token_start_col = column;
 
     if (is_digit(c)) { return get_number(); }
     else if (is_alpha(c)) { return get_identifier(); }
@@ -174,8 +173,8 @@ void Lexer::skip_whitespace()
         case '\t': next(); break;
         case '\n':
             line++;
-            column = 1;
             next();
+            column = 1;
             break;
         default: return;
         }

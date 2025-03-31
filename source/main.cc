@@ -111,7 +111,13 @@ void process_file(const String& file, const Config& config)
         Node* ast = parser.parse();
         LOG_DEBUG("File parsed!");
 
-        if (config.ast) { LOG_INFO("AST: " + ast->to_s()); }
+        if (config.ast)
+        {
+            LOG_INFO("Abstract Syntax Tree:");
+            std::istringstream stream(ast->to_s());
+            String line;
+            while (std::getline(stream, line)) { LOG_INFO(line); }
+        }
 
         LOG_DEBUG("Evaluating AST...");
         Node* res{ast->evaluate()};

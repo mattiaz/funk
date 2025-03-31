@@ -10,7 +10,10 @@ Parser::~Parser() {}
 Node* Parser::parse()
 {
     LOG_DEBUG("Parse program");
-    return parse_statement();
+
+    ProgramNode* program = new ProgramNode(SourceLocation(filename, 0, 0));
+    while (!done()) { program->add(parse_statement()); }
+    return program;
 }
 
 Parser Parser::load(String filename)
@@ -42,7 +45,7 @@ Token Parser::peek_next() const
 
 bool Parser::done() const
 {
-    return index >= static_cast<int>(tokens.size());
+    return peek().get_type() == TokenType::EOF_TOKEN;
 }
 
 bool Parser::check(TokenType type) const
@@ -61,7 +64,15 @@ Node* Parser::parse_statement()
 {
     LOG_DEBUG("Parse statement");
     Node* expr{parse_expression()};
-    if (!match(TokenType::SEMICOLON)) throw SyntaxError(peek_prev().get_location(), "Expected ';'");
+
+    if (!match(TokenType::SEMICOLON))
+    {
+        Token prev{peek_prev()};
+        SourceLocation loc{prev.get_location()};
+        SourceLocation error_loc(loc.filename, loc.line, static_cast<int>(loc.column + prev.get_lexeme().length()));
+        throw SyntaxError(error_loc, "Expected ';'");
+    }
+
     return expr;
 }
 
@@ -185,8 +196,7 @@ Node* Parser::parse_unary()
 Node* Parser::parse_factor()
 {
     LOG_DEBUG("Parse factor");
-    if (check(TokenType::IDENTIFIER))
-        return parse_identifier();
+    if (check(TokenType::IDENTIFIER)) { return parse_identifier(); }
     else if (check(TokenType::NUMB) || check(TokenType::REAL) || check(TokenType::BOOL) || check(TokenType::CHAR) ||
              check(TokenType::TEXT))
     {
@@ -195,11 +205,19 @@ Node* Parser::parse_factor()
     else if (match(TokenType::L_PAR))
     {
         Node* expr{parse_expression()};
-        if (!match(TokenType::R_PAR)) throw SyntaxError(peek_prev().get_location(), "Expected ')'");
+
+        if (!match(TokenType::R_PAR))
+        {
+            Token prev{peek_prev()};
+            SourceLocation loc{prev.get_location()};
+            SourceLocation error_loc(loc.filename, loc.line, static_cast<int>(loc.column + prev.get_lexeme().length()));
+            throw SyntaxError(error_loc, "Expected ')'");
+        }
+
         return expr;
     }
 
-    throw SyntaxError(peek().get_location(), "???");
+    throw SyntaxError(peek_prev().get_location(), "Expected expression, got " + token_type_to_s(peek().get_type()));
 }
 
 Node* Parser::parse_literal()
