@@ -1,4 +1,4 @@
-#include "ast/BinaryOpNode.h"
+#include "ast/expression/BinaryOpNode.h"
 
 namespace funk
 {

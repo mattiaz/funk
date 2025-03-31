@@ -1,4 +1,4 @@
-#include "ast/UnaryOpNode.h"
+#include "ast/expression/UnaryOpNode.h"
 
 namespace funk
 {

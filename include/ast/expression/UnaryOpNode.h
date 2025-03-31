@@ -4,8 +4,8 @@
  */
 #pragma once
 
-#include "ast/ExpressionNode.h"
-#include "ast/LiteralNode.h"
+#include "ast/expression/ExpressionNode.h"
+#include "ast/expression/LiteralNode.h"
 #include "token/Token.h"
 
 namespace funk

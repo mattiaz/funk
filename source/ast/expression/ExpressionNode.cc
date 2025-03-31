@@ -1,4 +1,4 @@
-#include "ast/ExpressionNode.h"
+#include "ast/expression/ExpressionNode.h"
 
 namespace funk
 {
