@@ -1,5 +1,5 @@
-#include "ast/BinaryOpNode.h"
-#include "ast/LiteralNode.h"
+#include "ast/expression/BinaryOpNode.h"
+#include "ast/expression/LiteralNode.h"
 #include "utils/Common.h"
 #include <gtest/gtest.h>
 
@@ -27,9 +27,10 @@ TEST_F(TestBinaryOpNode, Construction)
     LiteralNode* left = new LiteralNode(loc, 5);
     LiteralNode* right = new LiteralNode(loc, 3);
 
-    BinaryOpNode node(left, BinaryOp::PLUS, right);
+    Token op(loc, "+", TokenType::PLUS);
+    BinaryOpNode node(left, op, right);
 
-    ASSERT_EQ(node.get_op(), BinaryOp::PLUS);
+    ASSERT_EQ(node.get_op().get_type(), TokenType::PLUS);
     ASSERT_EQ(node.get_left(), left);
     ASSERT_EQ(node.get_right(), right);
 }
@@ -40,7 +41,8 @@ TEST_F(TestBinaryOpNode, ArithmeticOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 5);
         LiteralNode* right = new LiteralNode(loc, 3);
-        BinaryOpNode node(left, BinaryOp::PLUS, right);
+        Token op(loc, "+", TokenType::PLUS);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<int>());
@@ -51,7 +53,8 @@ TEST_F(TestBinaryOpNode, ArithmeticOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 10);
         LiteralNode* right = new LiteralNode(loc, 4);
-        BinaryOpNode node(left, BinaryOp::MINUS, right);
+        Token op(loc, "-", TokenType::MINUS);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<int>());
@@ -62,7 +65,8 @@ TEST_F(TestBinaryOpNode, ArithmeticOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 5);
         LiteralNode* right = new LiteralNode(loc, 6);
-        BinaryOpNode node(left, BinaryOp::MULTIPLY, right);
+        Token op(loc, "*", TokenType::MULTIPLY);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<int>());
@@ -73,7 +77,8 @@ TEST_F(TestBinaryOpNode, ArithmeticOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 20);
         LiteralNode* right = new LiteralNode(loc, 4);
-        BinaryOpNode node(left, BinaryOp::DIVIDE, right);
+        Token op(loc, "/", TokenType::DIVIDE);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<int>());
@@ -84,7 +89,8 @@ TEST_F(TestBinaryOpNode, ArithmeticOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 17);
         LiteralNode* right = new LiteralNode(loc, 5);
-        BinaryOpNode node(left, BinaryOp::MODULO, right);
+        Token op(loc, "%", TokenType::MODULO);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<int>());
@@ -95,7 +101,8 @@ TEST_F(TestBinaryOpNode, ArithmeticOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 2);
         LiteralNode* right = new LiteralNode(loc, 3);
-        BinaryOpNode node(left, BinaryOp::POWER, right);
+        Token op(loc, "^", TokenType::POWER);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<int>());
@@ -109,7 +116,8 @@ TEST_F(TestBinaryOpNode, ComparisonOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 5);
         LiteralNode* right = new LiteralNode(loc, 5);
-        BinaryOpNode node(left, BinaryOp::EQUAL, right);
+        Token op(loc, "==", TokenType::EQUAL);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<bool>());
@@ -120,7 +128,8 @@ TEST_F(TestBinaryOpNode, ComparisonOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 5);
         LiteralNode* right = new LiteralNode(loc, 3);
-        BinaryOpNode node(left, BinaryOp::NOT_EQUAL, right);
+        Token op(loc, "!=", TokenType::NOT_EQUAL);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<bool>());
@@ -131,7 +140,8 @@ TEST_F(TestBinaryOpNode, ComparisonOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 3);
         LiteralNode* right = new LiteralNode(loc, 5);
-        BinaryOpNode node(left, BinaryOp::LESS, right);
+        Token op(loc, "<", TokenType::LESS);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<bool>());
@@ -142,7 +152,8 @@ TEST_F(TestBinaryOpNode, ComparisonOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 5);
         LiteralNode* right = new LiteralNode(loc, 5);
-        BinaryOpNode node(left, BinaryOp::LESS_EQUAL, right);
+        Token op(loc, "<=", TokenType::LESS_EQUAL);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<bool>());
@@ -153,7 +164,8 @@ TEST_F(TestBinaryOpNode, ComparisonOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 8);
         LiteralNode* right = new LiteralNode(loc, 5);
-        BinaryOpNode node(left, BinaryOp::GREATER, right);
+        Token op(loc, ">", TokenType::GREATER);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<bool>());
@@ -164,7 +176,8 @@ TEST_F(TestBinaryOpNode, ComparisonOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 5);
         LiteralNode* right = new LiteralNode(loc, 5);
-        BinaryOpNode node(left, BinaryOp::GREATER_EQUAL, right);
+        Token op(loc, ">=", TokenType::GREATER_EQUAL);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<bool>());
@@ -178,7 +191,8 @@ TEST_F(TestBinaryOpNode, LogicalOperations)
     {
         LiteralNode* left = new LiteralNode(loc, true);
         LiteralNode* right = new LiteralNode(loc, true);
-        BinaryOpNode node(left, BinaryOp::AND, right);
+        Token op(loc, "&&", TokenType::AND);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<bool>());
@@ -189,7 +203,8 @@ TEST_F(TestBinaryOpNode, LogicalOperations)
     {
         LiteralNode* left = new LiteralNode(loc, false);
         LiteralNode* right = new LiteralNode(loc, true);
-        BinaryOpNode node(left, BinaryOp::OR, right);
+        Token op(loc, "||", TokenType::OR);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<bool>());
@@ -203,7 +218,8 @@ TEST_F(TestBinaryOpNode, MixedTypeOperations)
     {
         LiteralNode* left = new LiteralNode(loc, 5);
         LiteralNode* right = new LiteralNode(loc, 3.5);
-        BinaryOpNode node(left, BinaryOp::PLUS, right);
+        Token op(loc, "+", TokenType::PLUS);
+        BinaryOpNode node(left, op, right);
 
         NodeValue result = node.get_value();
         ASSERT_TRUE(result.is_a<double>());
@@ -217,7 +233,8 @@ TEST_F(TestBinaryOpNode, ErrorCases)
     {
         LiteralNode* left = new LiteralNode(loc, 10);
         LiteralNode* right = new LiteralNode(loc, 0);
-        BinaryOpNode node(left, BinaryOp::DIVIDE, right);
+        Token op(loc, "/", TokenType::DIVIDE);
+        BinaryOpNode node(left, op, right);
 
         ASSERT_THROW(node.get_value(), RuntimeError);
     }
@@ -226,7 +243,8 @@ TEST_F(TestBinaryOpNode, ErrorCases)
     {
         LiteralNode* left = new LiteralNode(loc, String("hello"));
         LiteralNode* right = new LiteralNode(loc, 5);
-        BinaryOpNode node(left, BinaryOp::MODULO, right);
+        Token op(loc, "%", TokenType::MODULO);
+        BinaryOpNode node(left, op, right);
 
         ASSERT_THROW(node.get_value(), TypeError);
     }
@@ -235,7 +253,8 @@ TEST_F(TestBinaryOpNode, ErrorCases)
     {
         LiteralNode* left = new LiteralNode(loc, String("hello"));
         LiteralNode* right = new LiteralNode(loc, 123);
-        BinaryOpNode node(left, BinaryOp::PLUS, right);
+        Token op(loc, "+", TokenType::PLUS);
+        BinaryOpNode node(left, op, right);
 
         ASSERT_THROW(node.get_value(), TypeError);
     }
@@ -245,7 +264,8 @@ TEST_F(TestBinaryOpNode, StringRepresentation)
 {
     LiteralNode* left = new LiteralNode(loc, 10);
     LiteralNode* right = new LiteralNode(loc, 5);
-    BinaryOpNode node(left, BinaryOp::PLUS, right);
+    Token op(loc, "+", TokenType::PLUS);
+    BinaryOpNode node(left, op, right);
 
     ASSERT_EQ(node.to_s(), "(10 + 5)");
 }
@@ -254,7 +274,8 @@ TEST_F(TestBinaryOpNode, Evaluate)
 {
     LiteralNode* left = new LiteralNode(loc, 7);
     LiteralNode* right = new LiteralNode(loc, 3);
-    BinaryOpNode node(left, BinaryOp::MINUS, right);
+    Token op(loc, "-", TokenType::MINUS);
+    BinaryOpNode node(left, op, right);
 
     Node* result = node.evaluate();
     ASSERT_NE(result, nullptr);
@@ -272,8 +293,11 @@ TEST_F(TestBinaryOpNode, NestedOperations)
     LiteralNode* three = new LiteralNode(loc, 3);
     LiteralNode* two = new LiteralNode(loc, 2);
 
-    BinaryOpNode* addition = new BinaryOpNode(five, BinaryOp::PLUS, three);
-    BinaryOpNode multiplication(addition, BinaryOp::MULTIPLY, two);
+    Token plus_op(loc, "+", TokenType::PLUS);
+    Token mult_op(loc, "*", TokenType::MULTIPLY);
+
+    BinaryOpNode* addition = new BinaryOpNode(five, plus_op, three);
+    BinaryOpNode multiplication(addition, mult_op, two);
 
     NodeValue result = multiplication.get_value();
     ASSERT_TRUE(result.is_a<int>());

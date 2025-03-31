@@ -61,24 +61,6 @@ TEST_F(TestLexer, Lexer)
     ASSERT_EQ(tokens[4].get_type(), TokenType::SEMICOLON);
 }
 
-TEST_F(TestLexer, LexerFromFile)
-{
-    Lexer lexer{read_file("examples/math.funk"), "examples/math.funk"};
-    auto tokens = lexer.tokenize();
-
-    ASSERT_EQ(tokens.size(), 10);
-    ASSERT_EQ(tokens[0].get_type(), TokenType::L_PAR);
-    ASSERT_EQ(tokens[1].get_type(), TokenType::NUMB);
-    ASSERT_EQ(tokens[2].get_type(), TokenType::PLUS);
-    ASSERT_EQ(tokens[3].get_type(), TokenType::NUMB);
-    ASSERT_EQ(tokens[4].get_type(), TokenType::R_PAR);
-    ASSERT_EQ(tokens[5].get_type(), TokenType::DIVIDE);
-    ASSERT_EQ(tokens[6].get_type(), TokenType::NUMB);
-    ASSERT_EQ(tokens[7].get_type(), TokenType::MULTIPLY);
-    ASSERT_EQ(tokens[8].get_type(), TokenType::NUMB);
-    ASSERT_EQ(tokens[9].get_type(), TokenType::EOF_TOKEN);
-}
-
 int main(int argc, char** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

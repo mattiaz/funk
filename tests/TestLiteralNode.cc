@@ -1,4 +1,4 @@
-#include "ast/LiteralNode.h"
+#include "ast/expression/LiteralNode.h"
 #include "utils/Common.h"
 #include <gtest/gtest.h>
 
@@ -81,7 +81,7 @@ TEST_F(TestLiteralNode, String)
     ASSERT_TRUE(node.get_value().is_a<String>());
     ASSERT_FALSE(node.get_value().is_nothing());
     ASSERT_EQ(node.get_value().get<String>(), "hello");
-    ASSERT_EQ(node.to_s(), "hello");
+    ASSERT_EQ(node.to_s(), "\"hello\"");
     ASSERT_EQ(node.get_value().cast<bool>(), true);
     ASSERT_THROW(node.get_value().cast<int>(), TypeError);
     ASSERT_THROW(node.get_value().cast<double>(), TypeError);
