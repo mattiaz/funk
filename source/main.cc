@@ -1,5 +1,5 @@
-#include "lexer/Lexer.h"
 #include "logging/LogMacros.h"
+#include "parser/Parser.h"
 #include "utils/ArgParser.h"
 #include "utils/Common.h"
 
@@ -43,10 +43,10 @@ int main(int argc, char* argv[])
     // Lex each file
     for (const auto& file : parser.get_files())
     {
-        LOG_INFO("Lexing file: " + file);
-        Lexer lexer(read_file(file), file);
-        for (const auto& token : lexer.tokenize()) { LOG_DEBUG(token); }
-        LOG_INFO("Finished lexing file: " + file);
+        Parser parser{Parser::load(file)};
+        Node* result{parser.parse()};
+
+        cout << result->to_s() << " = " << result->evaluate()->to_s() << '\n';
     }
 
     return 0;
