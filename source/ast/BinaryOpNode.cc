@@ -58,7 +58,7 @@ Node* BinaryOpNode::evaluate() const
 
 String BinaryOpNode::to_s() const
 {
-    return "(" + left->to_s() + " " + token_type_to_s(op.get_type()) + " " + right->to_s() + ")";
+    return "(" + left->to_s() + " " + op.get_lexeme() + " " + right->to_s() + ")";
 }
 
 NodeValue BinaryOpNode::get_value() const

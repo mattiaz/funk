@@ -43,7 +43,7 @@ Node* UnaryOpNode::evaluate() const
 
 String UnaryOpNode::to_s() const
 {
-    return "(" + token_type_to_s(op.get_type()) + expr->to_s() + ")";
+    return "(" + op.get_lexeme() + expr->to_s() + ")";
 }
 
 NodeValue UnaryOpNode::get_value() const

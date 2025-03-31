@@ -13,6 +13,8 @@ Node* LiteralNode::evaluate() const
 
 String LiteralNode::to_s() const
 {
+    if (value.is_a<String>()) { return "\"" + value.get<String>() + "\""; }
+    if (value.is_a<char>()) { return "'" + String(1, value.get<char>()) + "'"; }
     return value.cast<String>();
 }
 

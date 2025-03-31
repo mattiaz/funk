@@ -95,8 +95,13 @@ template <typename Op> NodeValue comparison(const NodeValue& lhs, const NodeValu
 
 NodeValue operator+(const NodeValue& lhs, const NodeValue& rhs)
 {
-    if (lhs.is_a<String>() && rhs.is_a<String>()) { return lhs.get<String>() + rhs.get<String>(); }
+    if ((lhs.is_a<String>() || lhs.is_a<char>()) && (rhs.is_a<String>() || rhs.is_a<char>()))
+    {
+        String left{lhs.is_a<String>() ? lhs.get<String>() : String(1, lhs.get<char>())};
+        String right{rhs.is_a<String>() ? rhs.get<String>() : String(1, rhs.get<char>())};
 
+        return left + right;
+    }
     return numeric_op(lhs, rhs, [](auto a, auto b)
     {
         return a + b;
