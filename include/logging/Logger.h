@@ -56,6 +56,18 @@ public:
     void set_file(const std::string& filePath);
 
     /**
+     * @brief Gets the current log level
+     * @return LogLevel The current log level
+     */
+    LogLevel get_level() const;
+
+    /**
+     * @brief Sets the log level
+     * @param level The log level to set
+     */
+    void set_level(LogLevel level);
+
+    /**
      * @brief Gets the current log file path
      * @return std::string The current log file path
      */
@@ -94,6 +106,7 @@ private:
 
     std::string log_path;   ///< Path to the log file
     std::ofstream log_file; ///< Output stream for the log file
+    LogLevel log_level;     ///< Current log level
 };
 
 /**

@@ -3,7 +3,7 @@
 namespace funk
 {
 
-Logger::Logger() : log_path("funk.log")
+Logger::Logger() : log_path("funk.log"), log_level(LogLevel::INFO)
 {
     file_open();
 }
@@ -22,6 +22,7 @@ Logger& Logger::instance()
 void Logger::log(LogLevel level, const std::string& message)
 {
     file_open();
+    if (level < log_level) return;
 
     auto now = std::chrono::system_clock::now();
     auto time = std::chrono::system_clock::to_time_t(now);
@@ -58,6 +59,16 @@ void Logger::set_file(const std::string& path)
 std::string Logger::get_file() const
 {
     return log_path;
+}
+
+void Logger::set_level(LogLevel level)
+{
+    log_level = level;
+}
+
+LogLevel Logger::get_level() const
+{
+    return log_level;
 }
 
 void Logger::file_open()
