@@ -3,8 +3,8 @@
 namespace funk
 {
 
-UnaryOpNode::UnaryOpNode(UnaryOp op, ExpressionNode* expr) :
-    ExpressionNode(expr->get_location()), op(op), expr(expr) {
+UnaryOpNode::UnaryOpNode(const Token& op, ExpressionNode* expr) :
+    ExpressionNode(op.get_location()), op(op), expr(expr) {
 
     };
 
@@ -22,10 +22,10 @@ Node* UnaryOpNode::evaluate() const
 
     try
     {
-        switch (op)
+        switch (op.get_type())
         {
-        case UnaryOp::NEGATE: result = -expr_value; break;
-        case UnaryOp::NOT: result = !expr_value; break;
+        case TokenType::MINUS: result = -expr_value; break;
+        case TokenType::NOT: result = !expr_value; break;
         default: throw RuntimeError(location, "Invalid unary operator");
         }
     }
@@ -43,7 +43,7 @@ Node* UnaryOpNode::evaluate() const
 
 String UnaryOpNode::to_s() const
 {
-    return "(" + op_to_s(op) + expr->to_s() + ")";
+    return "(" + token_type_to_s(op.get_type()) + expr->to_s() + ")";
 }
 
 NodeValue UnaryOpNode::get_value() const
@@ -54,7 +54,7 @@ NodeValue UnaryOpNode::get_value() const
     return result->get_value();
 }
 
-UnaryOp UnaryOpNode::get_op() const
+Token UnaryOpNode::get_op() const
 {
     return op;
 }
@@ -62,16 +62,6 @@ UnaryOp UnaryOpNode::get_op() const
 ExpressionNode* UnaryOpNode::get_expr() const
 {
     return expr;
-}
-
-String op_to_s(UnaryOp op)
-{
-    switch (op)
-    {
-    case UnaryOp::NEGATE: return "-";
-    case UnaryOp::NOT: return "!";
-    default: return "UNKNOWN";
-    }
 }
 
 }; // namespace funk

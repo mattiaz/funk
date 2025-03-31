@@ -57,40 +57,6 @@ bool Parser::match(TokenType expected)
     return true;
 }
 
-BinaryOp Parser::to_binary_op(const Token& token) const
-{
-    switch (token.get_type())
-    {
-    case TokenType::PLUS: return BinaryOp::PLUS;
-    case TokenType::MINUS: return BinaryOp::MINUS;
-    case TokenType::MULTIPLY: return BinaryOp::MULTIPLY;
-    case TokenType::DIVIDE: return BinaryOp::DIVIDE;
-    case TokenType::MODULO: return BinaryOp::MODULO;
-    case TokenType::POWER: return BinaryOp::POWER;
-    case TokenType::EQUAL: return BinaryOp::EQUAL;
-    case TokenType::NOT_EQUAL: return BinaryOp::NOT_EQUAL;
-    case TokenType::LESS: return BinaryOp::LESS;
-    case TokenType::LESS_EQUAL: return BinaryOp::LESS_EQUAL;
-    case TokenType::GREATER: return BinaryOp::GREATER;
-    case TokenType::GREATER_EQUAL: return BinaryOp::GREATER_EQUAL;
-    case TokenType::AND: return BinaryOp::AND;
-    case TokenType::OR: return BinaryOp::OR;
-
-    default: throw SyntaxError(token.get_location(), "Invalid binary operator: " + token.get_lexeme());
-    }
-}
-
-UnaryOp Parser::to_unary_op(const Token& token) const
-{
-    switch (token.get_type())
-    {
-    case TokenType::MINUS: return UnaryOp::NEGATE;
-    case TokenType::NOT: return UnaryOp::NOT;
-
-    default: throw SyntaxError(token.get_location(), "Invalid unary operator: " + token.get_lexeme());
-    }
-}
-
 Node* Parser::parse_statement()
 {
     LOG_DEBUG("Parse statement");
@@ -120,7 +86,7 @@ Node* Parser::parse_logical_or()
     {
         Token op{peek_prev()};
         ExpressionNode* right{dynamic_cast<ExpressionNode*>(parse_logical_and())};
-        left = new BinaryOpNode(left, to_binary_op(op), right);
+        left = new BinaryOpNode(left, op, right);
     }
 
     return left;
@@ -135,7 +101,7 @@ Node* Parser::parse_logical_and()
     {
         Token op{peek_prev()};
         ExpressionNode* right{dynamic_cast<ExpressionNode*>(parse_equality())};
-        left = new BinaryOpNode(left, to_binary_op(op), right);
+        left = new BinaryOpNode(left, op, right);
     }
 
     return left;
@@ -150,7 +116,7 @@ Node* Parser::parse_equality()
     {
         Token op{peek_prev()};
         ExpressionNode* right{dynamic_cast<ExpressionNode*>(parse_comparison())};
-        left = new BinaryOpNode(left, to_binary_op(op), right);
+        left = new BinaryOpNode(left, op, right);
     }
 
     return left;
@@ -166,7 +132,7 @@ Node* Parser::parse_comparison()
     {
         Token op{peek_prev()};
         ExpressionNode* right{dynamic_cast<ExpressionNode*>(parse_additive())};
-        left = new BinaryOpNode(left, to_binary_op(op), right);
+        left = new BinaryOpNode(left, op, right);
     }
 
     return left;
@@ -181,7 +147,7 @@ Node* Parser::parse_additive()
     {
         Token op{peek_prev()};
         ExpressionNode* right{dynamic_cast<ExpressionNode*>(parse_multiplicative())};
-        left = new BinaryOpNode(left, to_binary_op(op), right);
+        left = new BinaryOpNode(left, op, right);
     }
 
     return left;
@@ -197,7 +163,7 @@ Node* Parser::parse_multiplicative()
     {
         Token op{peek_prev()};
         ExpressionNode* right{dynamic_cast<ExpressionNode*>(parse_unary())};
-        left = new BinaryOpNode(left, to_binary_op(op), right);
+        left = new BinaryOpNode(left, op, right);
     }
 
     return left;
@@ -210,7 +176,7 @@ Node* Parser::parse_unary()
     {
         Token op{peek_prev()};
         ExpressionNode* right{dynamic_cast<ExpressionNode*>(parse_factor())};
-        return new UnaryOpNode(to_unary_op(op), right);
+        return new UnaryOpNode(op, right);
     }
 
     return parse_factor();

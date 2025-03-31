@@ -3,8 +3,8 @@
 namespace funk
 {
 
-BinaryOpNode::BinaryOpNode(ExpressionNode* left, BinaryOp op, ExpressionNode* right) :
-    ExpressionNode(left->get_location()), op(op), left(left), right(right)
+BinaryOpNode::BinaryOpNode(ExpressionNode* left, const Token& op, ExpressionNode* right) :
+    ExpressionNode(op.get_location()), op(op), left(left), right(right)
 {
 }
 
@@ -25,22 +25,22 @@ Node* BinaryOpNode::evaluate() const
 
     try
     {
-        switch (op)
+        switch (op.get_type())
         {
-        case BinaryOp::PLUS: result = left_value + right_value; break;
-        case BinaryOp::MINUS: result = left_value - right_value; break;
-        case BinaryOp::MULTIPLY: result = left_value * right_value; break;
-        case BinaryOp::DIVIDE: result = left_value / right_value; break;
-        case BinaryOp::MODULO: result = left_value % right_value; break;
-        case BinaryOp::POWER: result = pow(left_value, right_value); break;
-        case BinaryOp::EQUAL: result = left_value == right_value; break;
-        case BinaryOp::NOT_EQUAL: result = left_value != right_value; break;
-        case BinaryOp::LESS: result = left_value < right_value; break;
-        case BinaryOp::LESS_EQUAL: result = left_value <= right_value; break;
-        case BinaryOp::GREATER: result = left_value > right_value; break;
-        case BinaryOp::GREATER_EQUAL: result = left_value >= right_value; break;
-        case BinaryOp::AND: result = left_value && right_value; break;
-        case BinaryOp::OR: result = left_value || right_value; break;
+        case TokenType::PLUS: result = left_value + right_value; break;
+        case TokenType::MINUS: result = left_value - right_value; break;
+        case TokenType::MULTIPLY: result = left_value * right_value; break;
+        case TokenType::DIVIDE: result = left_value / right_value; break;
+        case TokenType::MODULO: result = left_value % right_value; break;
+        case TokenType::POWER: result = pow(left_value, right_value); break;
+        case TokenType::EQUAL: result = left_value == right_value; break;
+        case TokenType::NOT_EQUAL: result = left_value != right_value; break;
+        case TokenType::LESS: result = left_value < right_value; break;
+        case TokenType::LESS_EQUAL: result = left_value <= right_value; break;
+        case TokenType::GREATER: result = left_value > right_value; break;
+        case TokenType::GREATER_EQUAL: result = left_value >= right_value; break;
+        case TokenType::AND: result = left_value && right_value; break;
+        case TokenType::OR: result = left_value || right_value; break;
         default: throw RuntimeError(location, "Invalid binary operator");
         }
     }
@@ -58,7 +58,7 @@ Node* BinaryOpNode::evaluate() const
 
 String BinaryOpNode::to_s() const
 {
-    return "(" + left->to_s() + " " + op_to_s(op) + " " + right->to_s() + ")";
+    return "(" + left->to_s() + " " + token_type_to_s(op.get_type()) + " " + right->to_s() + ")";
 }
 
 NodeValue BinaryOpNode::get_value() const
@@ -69,7 +69,7 @@ NodeValue BinaryOpNode::get_value() const
     return result->get_value();
 }
 
-BinaryOp BinaryOpNode::get_op() const
+Token BinaryOpNode::get_op() const
 {
     return op;
 }
@@ -82,28 +82,6 @@ ExpressionNode* BinaryOpNode::get_left() const
 ExpressionNode* BinaryOpNode::get_right() const
 {
     return right;
-}
-
-String op_to_s(BinaryOp op)
-{
-    switch (op)
-    {
-    case BinaryOp::PLUS: return "+";
-    case BinaryOp::MINUS: return "-";
-    case BinaryOp::MULTIPLY: return "*";
-    case BinaryOp::DIVIDE: return "/";
-    case BinaryOp::MODULO: return "%";
-    case BinaryOp::POWER: return "^";
-    case BinaryOp::EQUAL: return "==";
-    case BinaryOp::NOT_EQUAL: return "!=";
-    case BinaryOp::LESS: return "<";
-    case BinaryOp::LESS_EQUAL: return "<=";
-    case BinaryOp::GREATER: return ">";
-    case BinaryOp::GREATER_EQUAL: return ">=";
-    case BinaryOp::AND: return "&&";
-    case BinaryOp::OR: return "||";
-    default: return "UNKNOWN";
-    }
 }
 
 } // namespace funk

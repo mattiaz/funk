@@ -34,9 +34,6 @@ private:
     bool check(TokenType type) const;
     bool match(TokenType expected);
 
-    BinaryOp to_binary_op(const Token& token) const;
-    UnaryOp to_unary_op(const Token& token) const;
-
     Node* parse_statement();
     Node* parse_expression();
     Node* parse_assignment();

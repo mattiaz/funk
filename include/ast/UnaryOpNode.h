@@ -6,25 +6,10 @@
 
 #include "ast/ExpressionNode.h"
 #include "ast/LiteralNode.h"
+#include "token/Token.h"
 
 namespace funk
 {
-
-/**
- * @brief Enumeration of all supported unary operators in the Funk language.
- */
-enum class UnaryOp
-{
-    NEGATE, ///< Negation operator (-)
-    NOT,    ///< Logical NOT operator (!)
-};
-
-/**
- * @brief Converts a unary operator to a string representation.
- * @param op The unary operator
- * @return String representation of the operator
- */
-String op_to_s(UnaryOp op);
 
 /**
  * @brief Class representing a unary operation in the Funk AST.
@@ -40,7 +25,7 @@ public:
      * @param op The unary operator to apply
      * @param expr The expression to apply the operator to
      */
-    UnaryOpNode(UnaryOp op, ExpressionNode* expr);
+    UnaryOpNode(const Token& op, ExpressionNode* expr);
 
     /**
      * @brief Virtual destructor for proper cleanup of resources.
@@ -69,7 +54,7 @@ public:
      * @brief Gets the unary operator used in this operation.
      * @return The unary operator
      */
-    UnaryOp get_op() const;
+    Token get_op() const;
 
     /**
      * @brief Gets the expression that the operator is applied to.
@@ -78,7 +63,7 @@ public:
     ExpressionNode* get_expr() const;
 
 private:
-    UnaryOp op;           ///< The unary operator
+    Token op;             ///< The unary operator
     ExpressionNode* expr; ///< The expression to apply the operator to
 };
 

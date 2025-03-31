@@ -6,39 +6,10 @@
 
 #include "ast/ExpressionNode.h"
 #include "ast/LiteralNode.h"
+#include "token/Token.h"
 
 namespace funk
 {
-
-/**
- * @brief Enumeration of all supported binary operators in the Funk language.
- * This enum defines both arithmetic and logical binary operations.
- */
-enum class BinaryOp
-{
-    PLUS,     ///< Addition operator (+)
-    MINUS,    ///< Subtraction operator (-)
-    MULTIPLY, ///< Multiplication operator (*)
-    DIVIDE,   ///< Division operator (/)
-    MODULO,   ///< Modulo operator (%)
-    POWER,    ///< Power operator (^)
-
-    EQUAL,         ///< Equality operator (==)
-    NOT_EQUAL,     ///< Inequality operator (!=)
-    LESS,          ///< Less than operator (<)
-    LESS_EQUAL,    ///< Less than or equal operator (<=)
-    GREATER,       ///< Greater than operator (>)
-    GREATER_EQUAL, ///< Greater than or equal operator (>=)
-    AND,           ///< Logical AND operator (&&)
-    OR,            ///< Logical OR operator (||)
-};
-
-/**
- * @brief Converts a binary operator to a string representation.
- * @param op The binary operator
- * @return String representation of the operator
- */
-String op_to_s(BinaryOp op);
 
 /**
  * @brief Class representing a binary operation in the Funk AST.
@@ -56,7 +27,7 @@ public:
      * @param op The binary operator to apply
      * @param right The right-hand side expression
      */
-    BinaryOpNode(ExpressionNode* left, BinaryOp op, ExpressionNode* right);
+    BinaryOpNode(ExpressionNode* left, const Token& op, ExpressionNode* right);
 
     /**
      * @brief Virtual destructor for proper cleanup of resources.
@@ -85,7 +56,7 @@ public:
      * @brief Gets the binary operator used in this operation.
      * @return The binary operator
      */
-    BinaryOp get_op() const;
+    Token get_op() const;
 
     /**
      * @brief Gets the left-hand side expression of the binary operation.
@@ -100,7 +71,7 @@ public:
     ExpressionNode* get_right() const;
 
 private:
-    BinaryOp op;           ///< The binary operator
+    Token op;              ///< The binary operator
     ExpressionNode* left;  ///< The left-hand side expression
     ExpressionNode* right; ///< The right-hand side expression
 };
