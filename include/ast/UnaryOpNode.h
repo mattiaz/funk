@@ -1,5 +1,5 @@
 /**
- * @file BinaryOpNode.h
+ * @file UnaryOpNode.h
  * @brief Defines the UnaryOpNode class for representing unary operations in the Funk AST.
  */
 #pragma once

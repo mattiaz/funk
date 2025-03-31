@@ -102,7 +102,7 @@ public:
     auto& get_variant() const { return value; }
 
 private:
-    std::variant<int, double, bool, char, String, None> value;
+    std::variant<int, double, bool, char, String, None> value; ///< The stored value
 };
 
 template <typename Op> NodeValue numeric_op(const NodeValue& lhs, const NodeValue& rhs, Op op);

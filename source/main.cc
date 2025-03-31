@@ -1,3 +1,11 @@
+/**
+ * @file main.cc
+ * @brief Main entry point for the Funk language interpreter
+ * This file contains the main function and supporting code for the Funk
+ * language interpreter, handling command-line arguments, file processing,
+ * and from lexing to evaluation.
+ */
+
 #include "logging/LogMacros.h"
 #include "parser/Parser.h"
 #include "utils/ArgParser.h"
@@ -5,7 +13,10 @@
 
 using namespace funk;
 
-// Command line options
+/**
+ * @brief Available command line options with descriptions
+ * Maps option flags to their help text descriptions
+ */
 HashMap<String, String> options{
     {"--help", "Display this help message"},
     {"--log <file>", "Set the log file"},
@@ -14,15 +25,23 @@ HashMap<String, String> options{
     {"--tokens", "Log the lexical tokens"},
 };
 
-// Configuration for command line options
+/**
+ * @brief Runtime configuration based on command line options
+ * Stores boolean flags for various runtime behaviors
+ */
 struct Config
 {
-    bool debug{false};
-    bool ast{false};
-    bool tokens{false};
+    bool debug{false};  ///< Enable debug level logging
+    bool ast{false};    ///< Print AST representation
+    bool tokens{false}; ///< Print lexical tokens
 };
 
-// Process command line arguments and set up logging
+/**
+ * @brief Process command line arguments and configure the interpreter
+ * @param parser The argument parser containing command line options
+ * @param config The configuration to populate
+ * @return bool True if setup was successful, false otherwise
+ */
 bool setup(ArgParser& parser, Config& config)
 {
     // Print help message
@@ -64,7 +83,12 @@ bool setup(ArgParser& parser, Config& config)
     return true;
 }
 
-// Process a single file
+/**
+ * @brief Process a single Funk source file
+ * Handles the complete execution pipeline: lexing, parsing, and evaluation
+ * @param file Path to the source file
+ * @param config Runtime configuration options
+ */
 void process_file(const String& file, const Config& config)
 {
     LOG_INFO("Processing file: " + file);
@@ -101,6 +125,13 @@ void process_file(const String& file, const Config& config)
     }
 }
 
+/**
+ * @brief Main entry point for the Funk interpreter
+ * Parses command line arguments and processes input files
+ * @param argc Number of command line arguments
+ * @param argv Array of command line argument strings
+ * @return int Exit code (0 for success, non-zero for errors)
+ */
 int main(int argc, char* argv[])
 {
     ArgParser parser(argc, argv);

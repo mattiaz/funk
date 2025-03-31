@@ -56,6 +56,10 @@ public:
      * @param message Description of the error
      */
     LexerError(const SourceLocation& loc, const String& message) : FunkError(loc, "Lexer error", message) {}
+    /**
+     * @brief Constructs a LexerError with a message.
+     * @param message Description of the error
+     */
     LexerError(const String& message) : FunkError(SourceLocation{"", 0, 0}, "Lexer error", message) {}
 };
 
@@ -72,6 +76,10 @@ public:
      * @param message Description of the error
      */
     SyntaxError(const SourceLocation& loc, const String& message) : FunkError(loc, "Syntax error", message) {}
+    /**
+     * @brief Constructs a SyntaxError with a message.
+     * @param message Description of the error
+     */
     SyntaxError(const String& message) : FunkError(SourceLocation{"", 0, 0}, "Syntax error", message) {}
 };
 
@@ -88,6 +96,10 @@ public:
      * @param message Description of the error
      */
     TypeError(const SourceLocation& loc, const String& message) : FunkError(loc, "Type error", message) {}
+    /**
+     * @brief Constructs a TypeError with a message.
+     * @param message Description of the error
+     */
     TypeError(const String& message) : FunkError(SourceLocation{"", 0, 0}, "Type error", message) {}
 };
 
@@ -104,6 +116,10 @@ public:
      * @param message Description of the error
      */
     RuntimeError(const SourceLocation& loc, const String& message) : FunkError(loc, "Runtime error", message) {}
+    /**
+     * @brief Constructs a RuntimeError with a message.
+     * @param message Description of the error
+     */
     RuntimeError(const String& message) : FunkError(SourceLocation{"", 0, 0}, "Runtime error", message) {}
 };
 
