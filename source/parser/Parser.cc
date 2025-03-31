@@ -11,9 +11,9 @@ Node* Parser::parse()
 {
     LOG_DEBUG("Parse program");
 
-    ProgramNode* program = new ProgramNode(SourceLocation(filename, 0, 0));
-    while (!done()) { program->add(parse_statement()); }
-    return program;
+    BlockNode* block = new BlockNode(SourceLocation(filename, 0, 0));
+    while (!done()) { block->add(parse_statement()); }
+    return block;
 }
 
 Parser Parser::load(String filename)

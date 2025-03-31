@@ -1,20 +1,25 @@
-#include "ast/ProgramNode.h"
+#include "ast/BlockNode.h"
 
 namespace funk
 {
-ProgramNode::ProgramNode(const SourceLocation& loc) : Node(loc), statements{} {}
+BlockNode::BlockNode(const SourceLocation& loc) : Node(loc), statements{} {}
 
-ProgramNode::~ProgramNode()
+BlockNode::~BlockNode()
 {
     for (Node* statement : statements) { delete statement; }
 }
 
-void ProgramNode::add(Node* statement)
+void BlockNode::add(Node* statement)
 {
     statements.push_back(statement);
 }
 
-Node* ProgramNode::evaluate() const
+Vector<Node*> BlockNode::get_statements() const
+{
+    return statements;
+}
+
+Node* BlockNode::evaluate() const
 {
     if (cached_eval) { return cached_eval; }
 
@@ -23,7 +28,7 @@ Node* ProgramNode::evaluate() const
     return cached_eval = result;
 }
 
-String ProgramNode::to_s() const
+String BlockNode::to_s() const
 {
     String repr{};
 

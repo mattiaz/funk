@@ -10,11 +10,11 @@
 #include "token/Token.h"
 #include "utils/Common.h"
 
-#include "ast/BinaryOpNode.h"
-#include "ast/LiteralNode.h"
+#include "ast/BlockNode.h"
 #include "ast/Node.h"
-#include "ast/ProgramNode.h"
-#include "ast/UnaryOpNode.h"
+#include "ast/expression/BinaryOpNode.h"
+#include "ast/expression/LiteralNode.h"
+#include "ast/expression/UnaryOpNode.h"
 
 namespace funk
 {

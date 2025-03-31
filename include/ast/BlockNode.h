@@ -1,15 +1,18 @@
 #pragma once
+
 #include "ast/Node.h"
 
 namespace funk
 {
-class ProgramNode : public Node
+
+class BlockNode : public Node
 {
 public:
-    ProgramNode(const SourceLocation& loc);
-    ~ProgramNode();
+    BlockNode(const SourceLocation& loc);
+    ~BlockNode();
 
     void add(Node* statement);
+    Vector<Node*> get_statements() const;
 
     Node* evaluate() const override;
     String to_s() const override;
@@ -17,4 +20,5 @@ public:
 private:
     Vector<Node*> statements;
 };
+
 } // namespace funk
