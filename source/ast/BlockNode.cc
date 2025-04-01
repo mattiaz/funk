@@ -21,11 +21,9 @@ Vector<Node*> BlockNode::get_statements() const
 
 Node* BlockNode::evaluate() const
 {
-    if (cached_eval) { return cached_eval; }
-
     Node* result{};
     for (Node* statement : statements) { result = statement->evaluate(); }
-    return cached_eval = result;
+    return result;
 }
 
 String BlockNode::to_s() const

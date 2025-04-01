@@ -7,8 +7,7 @@ LiteralNode::LiteralNode(const SourceLocation& loc, NodeValue value) : Expressio
 
 Node* LiteralNode::evaluate() const
 {
-    if (cached_eval) { return cached_eval; }
-    return cached_eval = const_cast<LiteralNode*>(this);
+    return const_cast<LiteralNode*>(this);
 }
 
 String LiteralNode::to_s() const

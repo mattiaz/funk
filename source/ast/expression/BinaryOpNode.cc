@@ -16,8 +16,6 @@ BinaryOpNode::~BinaryOpNode()
 
 Node* BinaryOpNode::evaluate() const
 {
-    if (cached_eval) { return cached_eval; }
-
     NodeValue left_value{left->get_value()};
     NodeValue right_value{right->get_value()};
 
@@ -53,7 +51,7 @@ Node* BinaryOpNode::evaluate() const
         throw RuntimeError(location, e.what());
     }
 
-    return cached_eval = new LiteralNode(location, result);
+    return new LiteralNode(location, result);
 }
 
 String BinaryOpNode::to_s() const

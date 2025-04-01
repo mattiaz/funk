@@ -48,8 +48,7 @@ public:
     SourceLocation get_location() const;
 
 protected:
-    SourceLocation location;            ///< Source location where this node appears in the code
-    mutable Node* cached_eval{nullptr}; ///< Cached evaluation result
+    SourceLocation location; ///< Source location where this node appears in the code
 };
 
 } // namespace funk

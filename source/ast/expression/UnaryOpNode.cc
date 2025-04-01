@@ -15,8 +15,6 @@ UnaryOpNode::~UnaryOpNode()
 
 Node* UnaryOpNode::evaluate() const
 {
-    if (cached_eval) { return cached_eval; }
-
     NodeValue expr_value{expr->get_value()};
     NodeValue result{};
 
@@ -38,7 +36,7 @@ Node* UnaryOpNode::evaluate() const
         throw RuntimeError(location, e.what());
     }
 
-    return cached_eval = new LiteralNode(location, result);
+    return new LiteralNode(location, result);
 }
 
 String UnaryOpNode::to_s() const
