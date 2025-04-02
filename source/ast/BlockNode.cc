@@ -4,6 +4,8 @@ namespace funk
 {
 BlockNode::BlockNode(const SourceLocation& loc) : Node(loc), statements{} {}
 
+BlockNode::BlockNode(const SourceLocation& loc, const Vector<Node*>& statements) : Node(loc), statements{statements} {}
+
 BlockNode::~BlockNode()
 {
     for (Node* statement : statements) { delete statement; }
@@ -21,8 +23,10 @@ Vector<Node*> BlockNode::get_statements() const
 
 Node* BlockNode::evaluate() const
 {
+    Scope::instance().push();
     Node* result{};
     for (Node* statement : statements) { result = statement->evaluate(); }
+    Scope::instance().pop();
     return result;
 }
 

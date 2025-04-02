@@ -7,6 +7,7 @@
 #pragma once
 
 #include "lexer/Lexer.h"
+#include "parser/Scope.h"
 #include "token/Token.h"
 #include "utils/Common.h"
 

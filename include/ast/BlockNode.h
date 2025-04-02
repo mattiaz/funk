@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ast/Node.h"
+#include "parser/Scope.h"
 
 namespace funk
 {
@@ -9,6 +10,7 @@ class BlockNode : public Node
 {
 public:
     BlockNode(const SourceLocation& loc);
+    BlockNode(const SourceLocation& loc, const Vector<Node*>& statements);
     ~BlockNode();
 
     void add(Node* statement);

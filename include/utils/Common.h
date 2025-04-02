@@ -47,6 +47,11 @@ template <typename T> using Vector = std::vector<T>;
 template <typename K, typename V> using HashMap = std::unordered_map<K, V>;
 
 /**
+ * @brief Macro for std::to_string.
+ */
+#define to_str(x) std::to_string(x)
+
+/**
  * @brief Stores location information for source code elements.
  * Used for error reporting and debugging to identify where in the source code an element appears.
  */
