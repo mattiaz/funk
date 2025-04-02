@@ -14,6 +14,7 @@
 #include "ast/BlockNode.h"
 #include "ast/Node.h"
 #include "ast/expression/BinaryOpNode.h"
+#include "ast/expression/CallNode.h"
 #include "ast/expression/LiteralNode.h"
 #include "ast/expression/UnaryOpNode.h"
 

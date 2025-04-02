@@ -1,0 +1,1 @@
+test("Hej " + read("Vad heter du?") + "!");
