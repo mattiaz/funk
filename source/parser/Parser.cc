@@ -63,6 +63,8 @@ bool Parser::match(TokenType expected)
 Node* Parser::parse_statement()
 {
     LOG_DEBUG("Parse statement");
+
+    Node* decl{parse_declaration()};
     Node* expr{parse_expression()};
 
     if (!match(TokenType::SEMICOLON))
@@ -73,7 +75,44 @@ Node* Parser::parse_statement()
         throw SyntaxError(error_loc, "Expected ';'");
     }
 
+    if (decl) { return decl; }
     return expr;
+}
+
+Node* Parser::parse_declaration()
+{
+    LOG_DEBUG("Parse declaration");
+
+    bool mut{false};
+    if (check(TokenType::MUT))
+    {
+        mut = true;
+        next();
+    }
+    if (check(TokenType::NUMB_TYPE) || check(TokenType::REAL_TYPE) || check(TokenType::BOOL_TYPE) ||
+        check(TokenType::CHAR_TYPE) || check(TokenType::TEXT_TYPE))
+    {
+        Token type{next()};
+        if (check(TokenType::IDENTIFIER))
+        {
+            Token identifier{next()};
+
+            if (match(TokenType::ASSIGN))
+            {
+                // needs to be parse_statement otherwise whines about semicolon dunno if I do it correctly
+                Node* expr{parse_statement()};
+                if (!expr) { throw SyntaxError(peek_prev().get_location(), "Expected expression after '='"); }
+
+                ExpressionNode* expr_node = dynamic_cast<ExpressionNode*>(expr);
+
+                return new DeclarationNode(
+                    type.get_location(), mut, type.get_type(), identifier.get_lexeme(), expr_node);
+            }
+            return new DeclarationNode(type.get_location(), mut, type.get_type(), identifier.get_lexeme());
+        }
+    }
+
+    return nullptr;
 }
 
 Node* Parser::parse_expression()
