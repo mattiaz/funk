@@ -13,6 +13,7 @@
 
 #include "ast/BlockNode.h"
 #include "ast/Node.h"
+#include "ast/declaration/DeclarationNode.h"
 #include "ast/expression/BinaryOpNode.h"
 #include "ast/expression/LiteralNode.h"
 #include "ast/expression/UnaryOpNode.h"
@@ -107,6 +108,12 @@ private:
      * @return Node* The AST node representing the statement
      */
     Node* parse_statement();
+
+    /**
+     * @brief Parses a declaration
+     * @return Node* The AST node representing the declaration
+     */
+    Node* parse_declaration();
 
     /**
      * @brief Parses an expression
