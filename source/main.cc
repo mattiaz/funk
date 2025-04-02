@@ -116,7 +116,7 @@ void process_file(const String& file, const Config& config)
             LOG_INFO("Abstract Syntax Tree:");
             std::istringstream stream(ast->to_s());
             String line;
-            while (std::getline(stream, line)) { LOG_INFO(line); }
+            while (getline(stream, line)) { LOG_INFO(line); }
         }
 
         LOG_DEBUG("Evaluating AST...");

@@ -268,6 +268,22 @@ Node* Parser::parse_literal()
 
 Node* Parser::parse_identifier()
 {
+    LOG_DEBUG("Parse identifier");
+    Token identifier{next()};
+
+    if (match(TokenType::L_PAR))
+    {
+        Vector<ExpressionNode*> arguments{};
+        if (!check(TokenType::R_PAR))
+        {
+            do {
+                arguments.push_back(dynamic_cast<ExpressionNode*>(parse_expression()));
+            } while (match(TokenType::COMMA));
+        }
+        if (!match(TokenType::R_PAR)) { throw SyntaxError(peek().get_location(), "Expected ')'"); }
+        return new CallNode(identifier, arguments);
+    }
+
     return nullptr;
 }
 

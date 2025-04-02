@@ -25,12 +25,9 @@ String FunkError::trace() const
     std::istringstream stream(source);
     String line;
 
-    for (int i = 1; i < location.line && std::getline(stream, line); i++) {}
+    for (int i = 1; i < location.line && getline(stream, line); i++) {}
 
-    if (std::getline(stream, line))
-    {
-        os << "    " << line << '\n' << "    " << String(location.column - 1, ' ') << "^\n";
-    }
+    if (getline(stream, line)) { os << "    " << line << '\n' << "    " << String(location.column - 1, ' ') << "^\n"; }
 
     os << what() << '\n';
 
