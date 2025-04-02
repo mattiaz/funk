@@ -122,7 +122,8 @@ void process_file(const String& file, const Config& config)
         LOG_DEBUG("Evaluating AST...");
         Node* res{ast->evaluate()};
         LOG_DEBUG("AST evaluated!");
-        LOG_INFO("Result: " + res->to_s());
+        if (!res) { LOG_INFO("Result: nullptr"); }
+        else { LOG_INFO("Result: " + res->to_s()); }
     }
     catch (const FunkError& e)
     {

@@ -6,18 +6,20 @@
  */
 #pragma once
 
-#include "lexer/Lexer.h"
-#include "parser/Scope.h"
-#include "token/Token.h"
-#include "utils/Common.h"
-
 #include "ast/BlockNode.h"
 #include "ast/Node.h"
+#include "ast/control/IfNode.h"
+#include "ast/control/WhileNode.h"
 #include "ast/declaration/DeclarationNode.h"
 #include "ast/expression/BinaryOpNode.h"
 #include "ast/expression/CallNode.h"
 #include "ast/expression/LiteralNode.h"
 #include "ast/expression/UnaryOpNode.h"
+#include "lexer/Lexer.h"
+#include "logging/LogMacros.h"
+#include "parser/Scope.h"
+#include "token/Token.h"
+#include "utils/Common.h"
 
 namespace funk
 {
@@ -115,6 +117,30 @@ private:
      * @return Node* The AST node representing the declaration
      */
     Node* parse_declaration();
+
+    /**
+     * @brief Parses a block of statements
+     * @return Node* The AST node representing the block
+     */
+    Node* parse_block();
+
+    /**
+     * @brief Parses a control flow statement
+     * @return Node* The AST node representing the control flow statement
+     */
+    Node* parse_control();
+
+    /**
+     * @brief Parses an if statement
+     * @return Node* The AST node representing the if statement
+     */
+    Node* parse_if();
+
+    /**
+     * @brief Parses a while loop
+     * @return Node* The AST node representing the while loop
+     */
+    Node* parse_while();
 
     /**
      * @brief Parses an expression

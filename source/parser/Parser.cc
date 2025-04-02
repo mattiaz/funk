@@ -1,5 +1,4 @@
 #include "parser/Parser.h"
-#include "logging/LogMacros.h"
 
 namespace funk
 {
@@ -64,8 +63,14 @@ Node* Parser::parse_statement()
 {
     LOG_DEBUG("Parse statement");
 
+    Node* control{parse_control()};
+    if (control) { return control; }
+
     Node* decl{parse_declaration()};
+    if (decl) { return decl; }
+
     Node* expr{parse_expression()};
+    if (!expr) { throw SyntaxError(peek().get_location(), "Expected statement"); }
 
     if (!match(TokenType::SEMICOLON))
     {
@@ -75,7 +80,6 @@ Node* Parser::parse_statement()
         throw SyntaxError(error_loc, "Expected ';'");
     }
 
-    if (decl) { return decl; }
     return expr;
 }
 
@@ -113,6 +117,55 @@ Node* Parser::parse_declaration()
     }
 
     return nullptr;
+}
+
+Node* Parser::parse_block()
+{
+    LOG_DEBUG("Parse block");
+    if (!match(TokenType::L_BRACE)) { throw SyntaxError(peek().get_location(), "Expected '{'"); }
+
+    Vector<Node*> statements{};
+    while (!check(TokenType::R_BRACE) && !done()) { statements.push_back(parse_statement()); }
+
+    if (!match(TokenType::R_BRACE)) { throw SyntaxError(peek().get_location(), "Expected '}'"); }
+
+    return new BlockNode(statements.at(0)->get_location(), statements);
+}
+
+Node* Parser::parse_control()
+{
+    LOG_DEBUG("Parse control flow");
+    if (match(TokenType::IF)) { return parse_if(); }
+    if (match(TokenType::WHILE)) { return parse_while(); }
+    return nullptr;
+}
+
+Node* Parser::parse_if()
+{
+    LOG_DEBUG("Parse if");
+    if (!match(TokenType::L_PAR)) { throw SyntaxError(peek().get_location(), "Expected '('"); }
+
+    ExpressionNode* condition{dynamic_cast<ExpressionNode*>(parse_expression())};
+    if (!match(TokenType::R_PAR)) { throw SyntaxError(peek().get_location(), "Expected ')'"); }
+
+    BlockNode* body{dynamic_cast<BlockNode*>(parse_block())};
+    Node* else_branch{nullptr};
+    if (match(TokenType::ELSE))
+    {
+        if (match(TokenType::IF)) { else_branch = parse_if(); }
+        else { else_branch = parse_block(); }
+    }
+    return new IfNode(condition, body, else_branch);
+}
+
+Node* Parser::parse_while()
+{
+    LOG_DEBUG("Parse while loop");
+    if (!match(TokenType::L_PAR)) { throw SyntaxError(peek().get_location(), "Expected '('"); }
+    ExpressionNode* condition{dynamic_cast<ExpressionNode*>(parse_expression())};
+    if (!match(TokenType::R_PAR)) { throw SyntaxError(peek().get_location(), "Expected ')'"); }
+    BlockNode* body{dynamic_cast<BlockNode*>(parse_block())};
+    return new WhileNode(condition, body);
 }
 
 Node* Parser::parse_expression()
