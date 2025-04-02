@@ -288,28 +288,25 @@ Node* Parser::parse_unary()
 Node* Parser::parse_factor()
 {
     LOG_DEBUG("Parse factor");
-    if (check(TokenType::IDENTIFIER)) { return parse_identifier(); }
+    Node* expr = nullptr;
+
+    if (check(TokenType::IDENTIFIER)) { expr = parse_identifier(); }
     else if (check(TokenType::NUMB) || check(TokenType::REAL) || check(TokenType::BOOL) || check(TokenType::CHAR) ||
              check(TokenType::TEXT))
     {
-        return parse_literal();
+        expr = parse_literal();
     }
     else if (match(TokenType::L_PAR))
     {
-        Node* expr{parse_expression()};
-
-        if (!match(TokenType::R_PAR))
-        {
-            Token prev{peek_prev()};
-            SourceLocation loc{prev.get_location()};
-            SourceLocation error_loc(loc.filename, loc.line, static_cast<int>(loc.column + prev.get_lexeme().length()));
-            throw SyntaxError(error_loc, "Expected ')'");
-        }
-
-        return expr;
+        expr = parse_expression();
+        if (!match(TokenType::R_PAR)) { throw SyntaxError(peek().get_location(), "Expected ')'"); }
     }
+    else if (check(TokenType::L_BRACKET)) { expr = parse_list(); }
+    else { throw SyntaxError(peek().get_location(), "Expected expression, got " + token_type_to_s(peek().get_type())); }
 
-    throw SyntaxError(peek_prev().get_location(), "Expected expression, got " + token_type_to_s(peek().get_type()));
+    while (match(TokenType::DOT)) { expr = parse_method_call(dynamic_cast<ExpressionNode*>(expr)); }
+
+    return expr;
 }
 
 Node* Parser::parse_literal()
@@ -324,20 +321,74 @@ Node* Parser::parse_identifier()
     LOG_DEBUG("Parse identifier");
     Token identifier{next()};
 
-    if (match(TokenType::L_PAR))
+    if (check(TokenType::L_PAR)) { return parse_call(identifier); }
+    else if (match(TokenType::DOT))
     {
-        Vector<ExpressionNode*> arguments{};
-        if (!check(TokenType::R_PAR))
-        {
-            do {
-                arguments.push_back(dynamic_cast<ExpressionNode*>(parse_expression()));
-            } while (match(TokenType::COMMA));
-        }
-        if (!match(TokenType::R_PAR)) { throw SyntaxError(peek().get_location(), "Expected ')'"); }
-        return new CallNode(identifier, arguments);
+        return parse_method_call(
+            new VariableNode(identifier.get_location(), identifier.get_lexeme(), false, TokenType::NONE, nullptr));
     }
 
-    return nullptr;
+    return new VariableNode(identifier.get_location(), identifier.get_lexeme(), false, TokenType::NONE, nullptr);
+}
+
+Node* Parser::parse_call(const Token& identifier)
+{
+    LOG_DEBUG("Parse call");
+
+    if (!match(TokenType::L_PAR)) { throw SyntaxError(peek().get_location(), "Expected '('"); }
+
+    Vector<ExpressionNode*> arguments{};
+    if (!check(TokenType::R_PAR))
+    {
+        do {
+            arguments.push_back(dynamic_cast<ExpressionNode*>(parse_expression()));
+        } while (match(TokenType::COMMA));
+    }
+    if (!match(TokenType::R_PAR)) { throw SyntaxError(peek().get_location(), "Expected ')'"); }
+    return new CallNode(identifier, arguments);
+}
+
+Node* Parser::parse_method_call(ExpressionNode* object)
+{
+    LOG_DEBUG("Parse method call");
+    if (!check(TokenType::IDENTIFIER)) { throw SyntaxError(peek().get_location(), "Expected method name after '.'"); }
+
+    Token method{next()};
+
+    if (!match(TokenType::L_PAR)) { throw SyntaxError(peek().get_location(), "Expected '(' after method name"); }
+
+    Vector<ExpressionNode*> arguments{};
+    if (!check(TokenType::R_PAR))
+    {
+        do {
+            arguments.push_back(dynamic_cast<ExpressionNode*>(parse_expression()));
+        } while (match(TokenType::COMMA));
+    }
+
+    if (!match(TokenType::R_PAR)) { throw SyntaxError(peek().get_location(), "Expected ')' after method arguments"); }
+
+    return new MethodCallNode(object, method, arguments);
+}
+
+Node* Parser::parse_list()
+{
+    LOG_DEBUG("Parse list");
+    if (!match(TokenType::L_BRACKET)) { throw SyntaxError(peek().get_location(), "Expected '['"); }
+
+    Vector<ExpressionNode*> elements{};
+    TokenType type{TokenType::NONE};
+
+    if (!check(TokenType::R_BRACKET))
+    {
+        do {
+            if (type == TokenType::NONE) { type = peek().get_type(); }
+            else if (type != peek().get_type()) { throw SyntaxError(peek().get_location(), "Inconsistent list types"); }
+            elements.push_back(dynamic_cast<ExpressionNode*>(parse_expression()));
+        } while (match(TokenType::COMMA));
+    }
+
+    if (!match(TokenType::R_BRACKET)) { throw SyntaxError(peek().get_location(), "Expected ']'"); }
+    return new ListNode(peek_prev().get_location(), type, elements);
 }
 
 } // namespace funk

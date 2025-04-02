@@ -20,7 +20,7 @@ public:
 
     NodeValue get_value() const override;
 
-private:
+protected:
     Token identifier;
     Vector<ExpressionNode*> args;
 };

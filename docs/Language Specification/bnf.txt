@@ -53,10 +53,12 @@
 <factor>        -> <literal>
                 | <identifier>
                 | <call>
+                | <method_call>
                 | <list_literal>
                 | '(' <expression> ')'
 
 <call>          -> <identifier> '(' [<argument_list>] ')'
+<method_call>   -> <expression> '.' <identifier> '(' [<argument_list>] ')'
 <argument_list> -> <expression> [',' <expression>]*
 
 <list_literal>  -> '[' [<expression> [',' <expression>]*] ']'

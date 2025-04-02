@@ -11,9 +11,12 @@
 #include "ast/control/IfNode.h"
 #include "ast/control/WhileNode.h"
 #include "ast/declaration/DeclarationNode.h"
+#include "ast/declaration/VariableNode.h"
 #include "ast/expression/BinaryOpNode.h"
 #include "ast/expression/CallNode.h"
+#include "ast/expression/ListNode.h"
 #include "ast/expression/LiteralNode.h"
+#include "ast/expression/MethodCallNode.h"
 #include "ast/expression/UnaryOpNode.h"
 #include "lexer/Lexer.h"
 #include "logging/LogMacros.h"
@@ -213,5 +216,23 @@ private:
      * @return Node* The AST node representing the identifier
      */
     Node* parse_identifier();
+
+    /**
+     * @brief Parses a call expression
+     * @return Node* The AST node representing the call expression
+     */
+    Node* parse_call(const Token& identifier);
+
+    /**
+     * @brief Parses a method call expression
+     * @return Node* The AST node representing the method call expression
+     */
+    Node* parse_method_call(ExpressionNode* object);
+
+    /**
+     * @brief Parses a list expression
+     * @return Node* The AST node representing the list expression
+     */
+    Node* parse_list();
 };
 } // namespace funk
