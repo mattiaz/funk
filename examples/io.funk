@@ -1,1 +1,1 @@
-test("Hej " + read("Vad heter du?") + "!");
+print("Hej " + read("Vad heter du?") + "!");
