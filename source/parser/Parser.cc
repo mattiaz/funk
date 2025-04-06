@@ -6,9 +6,18 @@ Parser::Parser(const Vector<Token>& tokens, const String& filename) : tokens(tok
 
 Parser::~Parser() {}
 
-Node* Parser::parse()
+Node* Parser::parse(const Vector<String>& args)
 {
     LOG_DEBUG("Parse program");
+
+    if (!args.empty())
+    {
+        String arg_list{};
+        for (const String& arg : args) { arg_list += arg + ", "; }
+        LOG_INFO("Arguments: " + arg_list.substr(0, arg_list.length() - 2));
+    }
+
+    // TODO: Handle arguments
 
     BlockNode* block = new BlockNode(SourceLocation(filename, 0, 0));
     while (!done()) { block->add(parse_statement()); }

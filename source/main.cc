@@ -69,13 +69,6 @@ bool setup(ArgParser& parser, Config& config)
         logger().set_level(LogLevel::DEBUG);
     }
 
-    // Check if any files were specified
-    if (!parser.has_files())
-    {
-        cerr << "No files specified!\n";
-        return false;
-    }
-
     // Set other configuration options
     config.ast = parser.has_option("--ast");
     config.tokens = parser.has_option("--tokens");
@@ -89,7 +82,7 @@ bool setup(ArgParser& parser, Config& config)
  * @param file Path to the source file
  * @param config Runtime configuration options
  */
-void process_file(const String& file, const Config& config)
+void process_file(const String& file, const Config& config, const Vector<String>& args)
 {
     LOG_INFO("Processing file: " + file);
 
@@ -108,7 +101,7 @@ void process_file(const String& file, const Config& config)
 
         LOG_DEBUG("Parsing file...");
         Parser parser{tokens, file};
-        Node* ast = parser.parse();
+        Node* ast = parser.parse(args);
         LOG_DEBUG("File parsed!");
 
         if (config.ast)
@@ -144,18 +137,12 @@ int main(int argc, char* argv[])
     ArgParser parser(argc, argv);
     Config config;
 
-    // Show help if no arguments provided
-    if (argc == 1)
-    {
-        cout << ArgParser::help("funk [options] <file>", options) << "\n";
-        return 0;
-    }
-
     // Setup and validate arguments
     if (!setup(parser, config)) { return 1; }
 
     // Process each file
-    for (const auto& file : parser.get_files()) { process_file(file, config); }
+    if (parser.has_file()) { process_file(parser.get_file(), config, parser.get_args()); }
+    else { cout << "Funk REPL, not implemented yet\n"; }
 
     return 0;
 }

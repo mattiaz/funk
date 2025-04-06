@@ -57,20 +57,27 @@ public:
     String get_option(const String& option) const;
 
     /**
-     * @brief Checks if any input files were provided.
-     * @return True if input files were provided
+     * @brief Checks if an input file was provided.
+     * @return True if an input file was provided
      */
-    bool has_files() const;
+    bool has_file() const;
 
     /**
-     * @brief Gets the list of input files.
-     * @return Vector of input file paths
+     * @brief Gets the path to the input file.
+     * @return Path to the input file, empty if no file was provided
      */
-    Vector<String> get_files() const;
+    String get_file() const;
+
+    /**
+     * @brief Gets the list of arguments passed to the program.
+     * @return Vector of argument strings, excluding the program name and input file
+     */
+    Vector<String> get_args() const;
 
 private:
     HashMap<String, String> options; ///< Map of options and their values
-    Vector<String> files;            ///< List of input files
+    String file;                     ///< Path to the input file
+    Vector<String> args;             ///< List of arguments passed to the program
 };
 
 } // namespace funk

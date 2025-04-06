@@ -49,9 +49,10 @@ public:
 
     /**
      * @brief Parses the token stream and returns the root AST node
+     * @param args The arguments passed to the program
      * @return Node* The root node of the parsed AST
      */
-    Node* parse();
+    Node* parse(const Vector<String>& args = {});
 
     /**
      * @brief Creates a parser from a file

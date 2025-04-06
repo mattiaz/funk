@@ -18,7 +18,11 @@ ArgParser::ArgParser(int argc, char* argv[])
             }
             else { options[arg] = ""; }
         }
-        else { files.push_back(arg); }
+        else
+        {
+            if (file.empty()) { file = arg; }
+            else { args.push_back(arg); }
+        }
     }
 }
 
@@ -52,14 +56,19 @@ String ArgParser::get_option(const String& option) const
     return options.at(option);
 }
 
-bool ArgParser::has_files() const
+bool ArgParser::has_file() const
 {
-    return !files.empty();
+    return !file.empty();
 }
 
-Vector<String> ArgParser::get_files() const
+String ArgParser::get_file() const
 {
-    return files;
+    return file;
+}
+
+Vector<String> ArgParser::get_args() const
+{
+    return args;
 }
 
 } // namespace funk
