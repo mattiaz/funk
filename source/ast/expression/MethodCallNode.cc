@@ -20,6 +20,12 @@ Node* MethodCallNode::evaluate() const
     Node* evaluated_object{object->evaluate()};
     if (!evaluated_object) { throw RuntimeError(location, "Failed to evaluate object for method call"); }
 
+    if (auto var_node = dynamic_cast<VariableNode*>(evaluated_object))
+    {
+        Node* var_value = var_node->get_value_node();
+        if (var_value) { evaluated_object = var_value; }
+    }
+
     if (auto list_node = dynamic_cast<ListNode*>(evaluated_object))
     {
         if (identifier.get_lexeme() == "length")

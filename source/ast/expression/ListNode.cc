@@ -33,7 +33,7 @@ NodeValue ListNode::get_value() const
 {
     ExpressionNode* result{dynamic_cast<ExpressionNode*>(evaluate())};
     if (!result) { throw RuntimeError(location, "List did not evaluate to an expression"); }
-    return result->get_value();
+    return NodeValue(result->to_s());
 }
 
 size_t ListNode::length() const

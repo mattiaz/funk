@@ -1,4 +1,5 @@
 #pragma once
+#include "ast/declaration/VariableNode.h"
 #include "ast/expression/CallNode.h"
 #include "ast/expression/ListNode.h"
 #include "logging/LogMacros.h"

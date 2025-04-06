@@ -1,0 +1,2 @@
+print("A list of arguments with length: ", ARGS.length());
+print("The arguments are:", ARGS);

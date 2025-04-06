@@ -10,20 +10,22 @@ Node* Parser::parse(const Vector<String>& args)
 {
     LOG_DEBUG("Parse program");
 
-    if (!args.empty())
-    {
-        String arg_list{};
-        for (const String& arg : args) { arg_list += arg + ", "; }
-        LOG_INFO("Arguments: " + arg_list.substr(0, arg_list.length() - 2));
-    }
-
-    // TODO: Handle arguments
-
     BlockNode* block = new BlockNode(SourceLocation(filename, 0, 0));
+
+    LOG_DEBUG("Parsing arguments");
+
+    // Create a Vector of ExpressionNodes for the arguments
+    Vector<ExpressionNode*> list{};
+    // Populate the Vector with LiteralNodes
+    for (const String& arg : args) { list.push_back(new LiteralNode(SourceLocation(filename, 0, 0), arg)); }
+    // Create a ListNode for the arguments
+    ExpressionNode* args_list{new ListNode(SourceLocation(filename, 0, 0), TokenType::TEXT, list)};
+    // Create a DeclarationNode for the arguments
+    block->add(new DeclarationNode(SourceLocation(filename, 0, 0), true, TokenType::TEXT, "ARGS", args_list));
+    // Parse the rest of the program
     while (!done()) { block->add(parse_statement()); }
     return block;
 }
-
 Parser Parser::load(String filename)
 {
     Lexer lexer{read_file(filename), filename};
@@ -71,6 +73,13 @@ bool Parser::match(TokenType expected)
 Node* Parser::parse_statement()
 {
     LOG_DEBUG("Parse statement");
+
+    if (check(TokenType::COMMENT) || check(TokenType::BLOCK_COMMENT))
+    {
+        LOG_INFO("Skipping comment");
+        next();
+        return nullptr;
+    }
 
     Node* control{parse_control()};
     if (control) { return control; }

@@ -32,6 +32,7 @@ Node* VariableNode::evaluate() const
 
 String VariableNode::to_s() const
 {
+    if (value == nullptr) { return "Variable: " + identifier; }
     return "Variable: " + identifier + " = " + value->to_s();
 }
 

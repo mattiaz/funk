@@ -13,6 +13,11 @@ BlockNode::~BlockNode()
 
 void BlockNode::add(Node* statement)
 {
+    if (statement == nullptr)
+    {
+        LOG_WARN("Attempted to add null statement to block");
+        return;
+    }
     statements.push_back(statement);
 }
 
