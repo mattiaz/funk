@@ -7,6 +7,12 @@ VariableNode::VariableNode(
     ExpressionNode{location}, identifier{identifier}, is_mutable{is_mutable}, type{type}, value{value}
 {
 }
+
+VariableNode::VariableNode(const SourceLocation& location, const String& identifier) :
+    ExpressionNode{location}, identifier{identifier}
+{
+}
+
 VariableNode::~VariableNode()
 {
     if (value) { delete value; }
@@ -15,6 +21,12 @@ VariableNode::~VariableNode()
 
 Node* VariableNode::evaluate() const
 {
+    if (value == nullptr)
+    {
+        Node* result = Scope::instance().get(identifier);
+        if (result == nullptr) { throw RuntimeError(get_location(), "Undefined variable '" + identifier + "'"); }
+        return result;
+    }
     return new VariableNode(get_location(), identifier, is_mutable, type, value);
 }
 

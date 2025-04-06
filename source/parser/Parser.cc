@@ -328,7 +328,7 @@ Node* Parser::parse_identifier()
             new VariableNode(identifier.get_location(), identifier.get_lexeme(), false, TokenType::NONE, nullptr));
     }
 
-    return new VariableNode(identifier.get_location(), identifier.get_lexeme(), false, TokenType::NONE, nullptr);
+    return new VariableNode(identifier.get_location(), identifier.get_lexeme());
 }
 
 Node* Parser::parse_call(const Token& identifier)

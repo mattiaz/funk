@@ -2,6 +2,7 @@
 
 #include "ast/Node.h"
 #include "ast/expression/ExpressionNode.h"
+#include "parser/Scope.h"
 #include "token/TokenType.h"
 
 namespace funk
@@ -12,6 +13,7 @@ class VariableNode : public ExpressionNode
 public:
     VariableNode(const SourceLocation& location, const String& identifier, bool is_mutable, TokenType type,
         ExpressionNode* value);
+    VariableNode(const SourceLocation& location, const String& identifier);
     ~VariableNode() override;
 
     Node* evaluate() const override;
