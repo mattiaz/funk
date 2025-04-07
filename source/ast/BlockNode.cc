@@ -35,6 +35,13 @@ Node* BlockNode::evaluate() const
     return result;
 }
 
+Node* BlockNode::evaluate_same_scope() const
+{
+    Node* result{};
+    for (Node* statement : statements) { result = statement->evaluate(); }
+    return result;
+}
+
 String BlockNode::to_s() const
 {
     String repr{};

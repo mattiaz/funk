@@ -16,6 +16,7 @@ class BuiltIn
 public:
     static Node* print(const CallNode& call, const Vector<ExpressionNode*>& args);
     static Node* read(const CallNode& call, const Vector<ExpressionNode*>& args);
+    static Node* fast_exit(const CallNode& call, const Vector<ExpressionNode*>& args);
 
     static HashMap<String, Node* (*)(const CallNode&, const Vector<ExpressionNode*>&)> functions;
 };

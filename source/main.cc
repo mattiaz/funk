@@ -47,7 +47,7 @@ bool setup(ArgParser& parser, Config& config)
     // Print help message
     if (parser.has_option("--help"))
     {
-        cout << ArgParser::help("funk [options] <file>", options) << "\n";
+        cout << ArgParser::help("funk [options] <file>", options) << endl;
         return false;
     }
 
@@ -121,8 +121,60 @@ void process_file(const String& file, const Config& config, const Vector<String>
     catch (const FunkError& e)
     {
         LOG_ERROR("Error processing file " + file + ": " + e.what());
-        cerr << "Error: " << e.trace() << '\n';
+        cerr << "Error: " << e.trace() << endl;
     }
+}
+
+/**
+ * @brief Funk REPL
+ * Reads and executes Funk code from the standard input
+ */
+void repl()
+{
+    cout << "Funk REPL. Press Ctrl+D to exit or type 'exit()'." << endl << endl;
+
+    String input;
+    Vector<Token> tokens{};
+    Parser parser{tokens, ""};
+    Scope::instance().push();
+
+    while (true)
+    {
+        cout << ">>> ";
+        cout.flush();
+        if (!getline(cin, input)) { break; }
+        if (input.empty()) { continue; }
+
+        try
+        {
+            // Add a semicolon to the input if it doesn't end with one
+            if (input.back() != ';') { input += ";"; }
+
+            Lexer lexer{input + "\n", ""};
+            Vector<Token> tokens{lexer.tokenize()};
+
+            parser.set_tokens(tokens);
+            BlockNode* ast{static_cast<BlockNode*>(parser.parse())};
+
+            Node* result{ast->evaluate_same_scope()};
+            if (result) { cout << result->to_s() << endl; }
+        }
+        catch (const FunkError& e)
+        {
+            cerr << "Error: " << e.trace() << endl;
+        }
+        catch (const std::exception& e)
+        {
+            cerr << "Error: " << e.what() << endl;
+        }
+        catch (...)
+        {
+            cerr << "Unknown error occurred" << endl;
+        }
+    }
+
+    Scope::instance().pop();
+    cout << "Bye!" << endl;
 }
 
 /**
@@ -142,7 +194,7 @@ int main(int argc, char* argv[])
 
     // Process each file
     if (parser.has_file()) { process_file(parser.get_file(), config, parser.get_args()); }
-    else { cout << "Funk REPL, not implemented yet\n"; }
+    else { repl(); }
 
     return 0;
 }

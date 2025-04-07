@@ -20,6 +20,7 @@
 using std::cerr;
 using std::cin;
 using std::cout;
+using std::endl;
 using std::getline;
 
 namespace funk
