@@ -19,7 +19,7 @@ using namespace funk;
  */
 HashMap<String, String> options{
     {"--help", "Display this help message"},
-    {"--log <file>", "Set the log file"},
+    {"--log=<file>", "Set the log file"},
     {"--debug", "Enable debug logging"},
     {"--ast", "Log the AST representation"},
     {"--tokens", "Log the lexical tokens"},
@@ -122,6 +122,16 @@ void process_file(const String& file, const Config& config, const Vector<String>
     {
         LOG_ERROR("Error processing file " + file + ": " + e.what());
         cerr << "Error: " << e.trace() << endl;
+    }
+    catch (const FileError& e)
+    {
+        LOG_ERROR(e.what());
+        cerr << e.what() << endl;
+    }
+    catch (const std::exception& e)
+    {
+        LOG_ERROR("Unknown error occurred: " + String(e.what()));
+        cerr << "Unknown error occurred: " << e.what() << endl;
     }
 }
 
