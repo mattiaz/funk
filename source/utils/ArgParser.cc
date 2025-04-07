@@ -9,20 +9,19 @@ ArgParser::ArgParser(int argc, char* argv[])
     {
         String arg{argv[i]};
 
+        if (!file.empty())
+        {
+            args.push_back(arg);
+            continue;
+        }
+
         if (arg.substr(0, 2) == "--")
         {
-            if (i + 1 < argc && argv[i + 1][0] != '-')
-            {
-                options[arg] = argv[i + 1];
-                ++i;
-            }
+            size_t eq_pos = arg.find('=');
+            if (eq_pos != String::npos) { options[arg.substr(0, eq_pos)] = arg.substr(eq_pos + 1); }
             else { options[arg] = ""; }
         }
-        else
-        {
-            if (file.empty()) { file = arg; }
-            else { args.push_back(arg); }
-        }
+        else { file = arg; }
     }
 }
 
