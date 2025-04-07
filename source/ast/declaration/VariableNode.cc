@@ -27,7 +27,8 @@ Node* VariableNode::evaluate() const
         if (result == nullptr) { throw RuntimeError(get_location(), "Undefined variable '" + identifier + "'"); }
         return result;
     }
-    return new VariableNode(get_location(), identifier, is_mutable, type, value);
+
+    return value->evaluate();
 }
 
 String VariableNode::to_s() const
@@ -38,12 +39,10 @@ String VariableNode::to_s() const
 
 NodeValue VariableNode::get_value() const
 {
-    if (value)
-    {
-        NodeValue val = value->get_value();
-        return val;
-    }
-    return NodeValue{};
+    ExpressionNode* result{dynamic_cast<ExpressionNode*>(evaluate())};
+    if (!result) { throw RuntimeError(location, "Variable did not evaluate to an expression."); }
+
+    return result->get_value();
 }
 
 bool VariableNode::get_mutable() const
