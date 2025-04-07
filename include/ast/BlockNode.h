@@ -17,6 +17,8 @@ public:
     Vector<Node*> get_statements() const;
 
     Node* evaluate() const override;
+    Node* evaluate_same_scope() const;
+
     String to_s() const override;
 
 private:

@@ -24,6 +24,12 @@ Node* Parser::parse(const Vector<String>& args)
     return block;
 }
 
+void Parser::set_tokens(const Vector<Token>& tokens)
+{
+    this->tokens = tokens;
+    this->index = 0;
+}
+
 Parser Parser::load(String filename)
 {
     Lexer lexer{read_file(filename), filename};
@@ -71,6 +77,9 @@ bool Parser::match(TokenType expected)
 Node* Parser::parse_statement()
 {
     LOG_DEBUG("Parse statement");
+
+    // Empty statement, just a semicolon
+    if (match(TokenType::SEMICOLON)) { return new LiteralNode(peek_prev().get_location(), NodeValue(None())); }
 
     Node* control{parse_control()};
     if (control) { return control; }

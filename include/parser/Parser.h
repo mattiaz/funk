@@ -48,6 +48,12 @@ public:
     ~Parser();
 
     /**
+     * @brief Sets the tokens to parse
+     * @param tokens The tokens to parse
+     */
+    void set_tokens(const Vector<Token>& tokens);
+
+    /**
      * @brief Parses the token stream and returns the root AST node
      * @param args The arguments passed to the program
      * @return Node* The root node of the parsed AST
