@@ -9,7 +9,7 @@ VariableNode::VariableNode(
 }
 
 VariableNode::VariableNode(const SourceLocation& location, const String& identifier) :
-    ExpressionNode{location}, identifier{identifier}
+    ExpressionNode{location}, identifier{identifier}, is_mutable{false}, type{TokenType::NONE}, value{nullptr}
 {
 }
 
