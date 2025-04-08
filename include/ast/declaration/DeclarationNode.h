@@ -5,6 +5,8 @@
 #include "ast/expression/LiteralNode.h"
 #include "parser/Scope.h"
 #include "token/Token.h"
+#include <functional>
+#include <map>
 
 namespace funk
 {

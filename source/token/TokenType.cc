@@ -81,4 +81,17 @@ String token_type_to_s(TokenType token)
 
     return "UNKNOWN";
 }
+
+TokenType type_token_to_value_token(TokenType token)
+{
+    switch (token)
+    {
+    case TokenType::NUMB_TYPE: return TokenType::NUMB;
+    case TokenType::REAL_TYPE: return TokenType::REAL;
+    case TokenType::BOOL_TYPE: return TokenType::BOOL;
+    case TokenType::CHAR_TYPE: return TokenType::CHAR;
+    case TokenType::TEXT_TYPE: return TokenType::TEXT;
+    default: return token;
+    }
+}
 } // namespace funk

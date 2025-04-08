@@ -70,6 +70,27 @@ bool NodeValue::is_nothing() const
     return is_a<None>();
 }
 
+TokenType NodeValue::get_token_type() const
+{
+    if (is_a<int>()) return TokenType::NUMB;
+    if (is_a<double>()) return TokenType::REAL;
+    if (is_a<bool>()) return TokenType::BOOL;
+    if (is_a<String>()) return TokenType::TEXT;
+    if (is_a<char>()) return TokenType::CHAR;
+    return TokenType::NONE;
+}
+
+bool NodeValue::type_as(const NodeValue& other) const
+{
+    if (is_a<int>() && other.is_a<int>()) { return true; }
+    if (is_a<double>() && other.is_a<double>()) { return true; }
+    if (is_a<bool>() && other.is_a<bool>()) { return true; }
+    if (is_a<char>() && other.is_a<char>()) { return true; }
+    if (is_a<String>() && other.is_a<String>()) { return true; }
+
+    return false;
+}
+
 template <typename Op> NodeValue numeric_op(const NodeValue& lhs, const NodeValue& rhs, Op op)
 {
     if (!lhs.is_numeric() || !rhs.is_numeric())

@@ -107,4 +107,11 @@ enum class TokenType
  * @return A string representation of the token type
  */
 String token_type_to_s(TokenType token);
+
+/**
+ * @brief Converts a TokenType to its corresponding value token type
+ * @param token The token type to convert
+ * @return The corresponding value token type
+ */
+TokenType type_token_to_value_token(TokenType token);
 } // namespace funk
