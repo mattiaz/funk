@@ -4,7 +4,13 @@ namespace funk
 {
 
 Scope::Scope() {}
-Scope::~Scope() {}
+Scope::~Scope()
+{
+    for (auto& scope : scopes)
+    {
+        for (auto& [name, node] : scope) { delete node; }
+    }
+}
 
 Scope& Scope::instance()
 {

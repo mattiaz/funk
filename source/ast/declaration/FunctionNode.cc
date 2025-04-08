@@ -28,6 +28,12 @@ FunctionNode::~FunctionNode()
 
 Node* FunctionNode::evaluate() const
 {
+    // Check if the function is built-in
+    if (BuiltIn::functions.find(identifier) != BuiltIn::functions.end())
+    {
+        throw RuntimeError(get_location(), "Cannot overwrite built-in function: " + identifier);
+    }
+
     // Register the function in the registry
     Registry::instance().add_function(const_cast<FunctionNode*>(this));
     // Add the function to the current scope
