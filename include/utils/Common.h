@@ -50,6 +50,13 @@ template <typename T> using Vector = std::vector<T>;
 template <typename K, typename V> using HashMap = std::unordered_map<K, V>;
 
 /**
+ * @brief Template alias for std::pair.
+ * @tparam K The key type
+ * @tparam V The value type
+ */
+template <typename K, typename V> using Pair = std::pair<K, V>;
+
+/**
  * @brief Macro for std::to_string.
  */
 #define to_str(x) std::to_string(x)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ast/Node.h"
+#include "ast/control/ReturnNode.h"
 #include "parser/Scope.h"
 
 namespace funk

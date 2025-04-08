@@ -47,4 +47,13 @@ Node* Scope::get(const String& name) const
     return nullptr;
 }
 
+bool Scope::contains(const String& name) const
+{
+    for (int i = scopes.size() - 1; i >= 0; i--)
+    {
+        if (scopes[i].find(name) != scopes[i].end()) { return true; }
+    }
+    return false;
+}
+
 } // namespace funk

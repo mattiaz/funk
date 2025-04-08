@@ -70,6 +70,12 @@ bool Parser::check(TokenType type) const
     return tokens.at(index).get_type() == type;
 }
 
+bool Parser::check_next(TokenType type) const
+{
+    if (done()) return false;
+    return tokens.at(index + 1).get_type() == type;
+}
+
 bool Parser::match(TokenType expected)
 {
     if (!check(expected)) return false;
@@ -81,12 +87,12 @@ Node* Parser::parse_statement()
 {
     LOG_DEBUG("Parse statement");
 
-    if (check(TokenType::COMMENT) || check(TokenType::BLOCK_COMMENT))
+    if (match(TokenType::COMMENT) || match(TokenType::BLOCK_COMMENT))
     {
         LOG_INFO("Skipping comment");
-        next();
         return nullptr;
     }
+
     // Empty statement, just a semicolon
     if (match(TokenType::SEMICOLON)) { return new LiteralNode(peek_prev().get_location(), NodeValue(None())); }
 
@@ -114,41 +120,122 @@ Node* Parser::parse_declaration()
 {
     LOG_DEBUG("Parse declaration");
 
-    bool mut{false};
-    if (check(TokenType::MUT))
-    {
-        mut = true;
-        next();
-    }
+    bool is_mutable{false};
+    if (match(TokenType::MUT)) { is_mutable = true; }
+
     if (check(TokenType::NUMB_TYPE) || check(TokenType::REAL_TYPE) || check(TokenType::BOOL_TYPE) ||
         check(TokenType::CHAR_TYPE) || check(TokenType::TEXT_TYPE))
     {
-        Token type{next()};
-        if (check(TokenType::IDENTIFIER))
-        {
-            Token identifier{next()};
-
-            if (match(TokenType::ASSIGN))
-            {
-                // needs to be parse_statement otherwise whines about semicolon dunno if I do it correctly
-                Node* expr{parse_statement()};
-                if (!expr) { throw SyntaxError(peek_prev().get_location(), "Expected expression after '='"); }
-
-                ExpressionNode* expr_node = dynamic_cast<ExpressionNode*>(expr);
-
-                return new DeclarationNode(
-                    type.get_location(), mut, type.get_type(), identifier.get_lexeme(), expr_node);
-            }
-            return new DeclarationNode(type.get_location(), mut, type.get_type(), identifier.get_lexeme());
-        }
+        return parse_variable_declaration(is_mutable);
     }
 
+    if (check(TokenType::FUNK)) { return parse_function_declaration(is_mutable); }
+
     return nullptr;
+}
+
+Node* Parser::parse_variable_declaration(bool is_mutable)
+{
+    LOG_DEBUG("Parse variable declaration");
+
+    Token type{next()};
+
+    if (!check(TokenType::IDENTIFIER)) { return nullptr; }
+    Token identifier{next()};
+
+    if (!match(TokenType::ASSIGN))
+    {
+        return new DeclarationNode(type.get_location(), is_mutable, type.get_type(), identifier.get_lexeme());
+    }
+
+    Node* expr{parse_statement()};
+    if (!expr) { throw SyntaxError(peek_prev().get_location(), "Expected expression after '='"); }
+
+    ExpressionNode* expr_node{dynamic_cast<ExpressionNode*>(expr)};
+    return new DeclarationNode(type.get_location(), is_mutable, type.get_type(), identifier.get_lexeme(), expr_node);
+}
+
+Node* Parser::parse_function_declaration(bool is_mutable)
+{
+    LOG_DEBUG("Parse function declaration");
+
+    if (!match(TokenType::FUNK)) { return nullptr; }
+    if (!check(TokenType::IDENTIFIER)) { throw SyntaxError(peek().get_location(), "Expected function name"); }
+
+    Token identifier{next()};
+
+    if (!match(TokenType::ASSIGN)) { throw SyntaxError(peek().get_location(), "Expected '=' after function name"); }
+    if (!match(TokenType::L_PAR)) { throw SyntaxError(peek().get_location(), "Expected '('"); }
+
+    // Check if it's a pattern matching function
+    if (check(TokenType::NUMB) || check(TokenType::REAL) || check(TokenType::BOOL) || check(TokenType::CHAR) ||
+        check(TokenType::TEXT))
+    {
+        LOG_DEBUG("Parse pattern matching function");
+        Vector<ExpressionNode*> pattern{};
+
+        // Collect pattern arguments
+        do {
+            pattern.push_back(dynamic_cast<LiteralNode*>(parse_literal()));
+        } while (match(TokenType::COMMA));
+
+        if (!match(TokenType::R_PAR)) { throw SyntaxError(peek().get_location(), "Expected ')' after pattern"); }
+
+        // Parse function body
+        BlockNode* body{dynamic_cast<BlockNode*>(parse_block())};
+        if (!body) { throw SyntaxError(peek().get_location(), "Expected function body"); }
+
+        return new FunctionNode(identifier.get_location(), is_mutable, identifier.get_lexeme(), pattern, body);
+    }
+    else
+    {
+        LOG_DEBUG("Parse regular function");
+        Vector<Pair<TokenType, String>> parameters{};
+
+        // Collect parameters
+        if (!check(TokenType::R_PAR))
+        {
+            do {
+                TokenType type;
+                switch (peek().get_type())
+                {
+                case TokenType::NUMB_TYPE: type = TokenType::NUMB_TYPE; break;
+                case TokenType::REAL_TYPE: type = TokenType::REAL_TYPE; break;
+                case TokenType::BOOL_TYPE: type = TokenType::BOOL_TYPE; break;
+                case TokenType::CHAR_TYPE: type = TokenType::CHAR_TYPE; break;
+                case TokenType::TEXT_TYPE: type = TokenType::TEXT_TYPE; break;
+                default: throw SyntaxError(peek().get_location(), "Expected parameter type");
+                }
+
+                next();
+
+                // Parse parameter name
+                if (!check(TokenType::IDENTIFIER))
+                {
+                    throw SyntaxError(peek().get_location(), "Expected parameter name");
+                }
+
+                // Add parameter to list
+                parameters.push_back({type, next().get_lexeme()});
+
+            } while (match(TokenType::COMMA));
+        }
+
+        if (!match(TokenType::R_PAR)) { throw SyntaxError(peek().get_location(), "Expected ')' after parameters"); }
+
+        // Parse function body
+        BlockNode* body{dynamic_cast<BlockNode*>(parse_block())};
+        if (!body) { throw SyntaxError(peek().get_location(), "Expected function body"); }
+
+        return new FunctionNode(identifier.get_location(), is_mutable, identifier.get_lexeme(), parameters, body);
+    }
 }
 
 Node* Parser::parse_block()
 {
     LOG_DEBUG("Parse block");
+
+    SourceLocation start{peek().get_location()};
     if (!match(TokenType::L_BRACE)) { throw SyntaxError(peek().get_location(), "Expected '{'"); }
 
     Vector<Node*> statements{};
@@ -156,20 +243,23 @@ Node* Parser::parse_block()
 
     if (!match(TokenType::R_BRACE)) { throw SyntaxError(peek().get_location(), "Expected '}'"); }
 
-    return new BlockNode(statements.at(0)->get_location(), statements);
+    return new BlockNode(start, statements);
 }
 
 Node* Parser::parse_control()
 {
     LOG_DEBUG("Parse control flow");
+
     if (match(TokenType::IF)) { return parse_if(); }
     if (match(TokenType::WHILE)) { return parse_while(); }
+    if (match(TokenType::RETURN)) { return parse_return(); }
     return nullptr;
 }
 
 Node* Parser::parse_if()
 {
     LOG_DEBUG("Parse if");
+
     if (!match(TokenType::L_PAR)) { throw SyntaxError(peek().get_location(), "Expected '('"); }
 
     ExpressionNode* condition{dynamic_cast<ExpressionNode*>(parse_expression())};
@@ -188,6 +278,7 @@ Node* Parser::parse_if()
 Node* Parser::parse_while()
 {
     LOG_DEBUG("Parse while loop");
+
     if (!match(TokenType::L_PAR)) { throw SyntaxError(peek().get_location(), "Expected '('"); }
     ExpressionNode* condition{dynamic_cast<ExpressionNode*>(parse_expression())};
     if (!match(TokenType::R_PAR)) { throw SyntaxError(peek().get_location(), "Expected ')'"); }
@@ -195,21 +286,72 @@ Node* Parser::parse_while()
     return new WhileNode(condition, body);
 }
 
+Node* Parser::parse_return()
+{
+    LOG_DEBUG("Parse return");
+
+    if (match(TokenType::SEMICOLON)) { return new ReturnNode(peek_prev().get_location(), nullptr); }
+    ExpressionNode* value{dynamic_cast<ExpressionNode*>(parse_expression())};
+    if (!value) { throw SyntaxError(peek().get_location(), "Expected expression"); }
+    if (!match(TokenType::SEMICOLON)) { throw SyntaxError(peek().get_location(), "Expected ';'"); }
+    return new ReturnNode(peek_prev().get_location(), value);
+}
+
 Node* Parser::parse_expression()
 {
     LOG_DEBUG("Parse expression");
+
     return parse_assignment();
 }
 
 Node* Parser::parse_assignment()
 {
     LOG_DEBUG("Parse assignment");
-    return parse_logical_or();
+
+    return parse_pipe();
+}
+
+Node* Parser::parse_pipe()
+{
+    LOG_DEBUG("Parse pipe");
+
+    Node* expr{parse_logical_or()};
+    while (check(TokenType::PIPE))
+    {
+        SourceLocation loc{next().get_location()};
+        ExpressionNode* source{dynamic_cast<ExpressionNode*>(expr)};
+        if (!source) { throw SyntaxError(peek().get_location(), "Left side of pipe must be an expression"); }
+
+        if (!check(TokenType::IDENTIFIER))
+        {
+            throw SyntaxError(peek().get_location(), "Expected function or function call after pipe operator");
+        }
+
+        Token identifier{next()};
+        Vector<ExpressionNode*> args{};
+
+        if (match(TokenType::L_PAR))
+        {
+            if (!check(TokenType::R_PAR))
+            {
+                do {
+                    args.push_back(dynamic_cast<ExpressionNode*>(parse_expression()));
+                } while (match(TokenType::COMMA));
+            }
+
+            if (!match(TokenType::R_PAR)) { throw SyntaxError(peek().get_location(), "Expected ')' after arguments"); }
+        }
+
+        expr = new PipeNode(loc, source, new CallNode(identifier, args));
+    }
+
+    return expr;
 }
 
 Node* Parser::parse_logical_or()
 {
     LOG_DEBUG("Parse logical or");
+
     ExpressionNode* left{dynamic_cast<ExpressionNode*>(parse_logical_and())};
 
     while (match(TokenType::OR))
@@ -225,6 +367,7 @@ Node* Parser::parse_logical_or()
 Node* Parser::parse_logical_and()
 {
     LOG_DEBUG("Parse logical and");
+
     ExpressionNode* left{dynamic_cast<ExpressionNode*>(parse_equality())};
 
     while (match(TokenType::AND))
@@ -240,6 +383,7 @@ Node* Parser::parse_logical_and()
 Node* Parser::parse_equality()
 {
     LOG_DEBUG("Parse equality");
+
     ExpressionNode* left{dynamic_cast<ExpressionNode*>(parse_comparison())};
 
     while (match(TokenType::EQUAL) || match(TokenType::NOT_EQUAL))
@@ -255,6 +399,7 @@ Node* Parser::parse_equality()
 Node* Parser::parse_comparison()
 {
     LOG_DEBUG("Parse comparison");
+
     ExpressionNode* left{dynamic_cast<ExpressionNode*>(parse_additive())};
 
     while (match(TokenType::LESS) || match(TokenType::LESS_EQUAL) || match(TokenType::GREATER) ||
@@ -271,6 +416,7 @@ Node* Parser::parse_comparison()
 Node* Parser::parse_additive()
 {
     LOG_DEBUG("Parse addative");
+
     ExpressionNode* left{dynamic_cast<ExpressionNode*>(parse_multiplicative())};
 
     while (match(TokenType::PLUS) || match(TokenType::MINUS))
@@ -286,6 +432,7 @@ Node* Parser::parse_additive()
 Node* Parser::parse_multiplicative()
 {
     LOG_DEBUG("Parse multiplicative");
+
     ExpressionNode* left{dynamic_cast<ExpressionNode*>(parse_unary())};
 
     while (
@@ -302,6 +449,7 @@ Node* Parser::parse_multiplicative()
 Node* Parser::parse_unary()
 {
     LOG_DEBUG("Parse unary");
+
     if (match(TokenType::MINUS) || match(TokenType::NOT))
     {
         Token op{peek_prev()};
@@ -315,6 +463,7 @@ Node* Parser::parse_unary()
 Node* Parser::parse_factor()
 {
     LOG_DEBUG("Parse factor");
+
     Node* expr = nullptr;
 
     if (check(TokenType::IDENTIFIER)) { expr = parse_identifier(); }
@@ -339,6 +488,7 @@ Node* Parser::parse_factor()
 Node* Parser::parse_literal()
 {
     LOG_DEBUG("Parse literal");
+
     Token literal{next()};
     return new LiteralNode(literal.get_location(), NodeValue(literal.get_value()));
 }
@@ -346,6 +496,7 @@ Node* Parser::parse_literal()
 Node* Parser::parse_identifier()
 {
     LOG_DEBUG("Parse identifier");
+
     Token identifier{next()};
 
     if (check(TokenType::L_PAR)) { return parse_call(identifier); }
@@ -378,6 +529,7 @@ Node* Parser::parse_call(const Token& identifier)
 Node* Parser::parse_method_call(ExpressionNode* object)
 {
     LOG_DEBUG("Parse method call");
+
     if (!check(TokenType::IDENTIFIER)) { throw SyntaxError(peek().get_location(), "Expected method name after '.'"); }
 
     Token method{next()};
@@ -400,6 +552,7 @@ Node* Parser::parse_method_call(ExpressionNode* object)
 Node* Parser::parse_list()
 {
     LOG_DEBUG("Parse list");
+
     if (!match(TokenType::L_BRACKET)) { throw SyntaxError(peek().get_location(), "Expected '['"); }
 
     Vector<ExpressionNode*> elements{};

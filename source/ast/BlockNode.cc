@@ -13,7 +13,7 @@ BlockNode::~BlockNode()
 
 void BlockNode::add(Node* statement)
 {
-    if (statement == nullptr)
+    if (!statement)
     {
         LOG_WARN("Attempted to add null statement to block");
         return;
@@ -30,7 +30,12 @@ Node* BlockNode::evaluate() const
 {
     Scope::instance().push();
     Node* result{};
-    for (Node* statement : statements) { result = statement->evaluate(); }
+    for (Node* statement : statements)
+    {
+        result = statement->evaluate();
+        if (dynamic_cast<ReturnNode*>(statement)) { break; }
+        result = nullptr;
+    }
     Scope::instance().pop();
     return result;
 }
