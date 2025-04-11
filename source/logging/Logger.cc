@@ -21,7 +21,6 @@ Logger& Logger::instance()
 
 void Logger::log(LogLevel level, const std::string& message)
 {
-    file_open();
     if (level < log_level) return;
 
     auto now = std::chrono::system_clock::now();

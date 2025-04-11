@@ -28,15 +28,28 @@ Vector<Node*> BlockNode::get_statements() const
 
 Node* BlockNode::evaluate() const
 {
-    Scope::instance().push();
+    bool push_scope{false};
+
+    for (Node* statement : statements)
+    {
+        if (dynamic_cast<DeclarationNode*>(statement) || dynamic_cast<FunctionNode*>(statement))
+        {
+            push_scope = true;
+            break;
+        }
+    }
+
+    if (push_scope) { Scope::instance().push(); }
     Node* result{};
+
     for (Node* statement : statements)
     {
         result = statement->evaluate();
         if (dynamic_cast<ReturnNode*>(statement)) { break; }
         result = nullptr;
     }
-    Scope::instance().pop();
+
+    if (push_scope) { Scope::instance().pop(); }
     return result;
 }
 

@@ -21,15 +21,15 @@ Scope& Scope::instance()
 void Scope::push()
 {
     LOG_DEBUG("Pushing scope at depth " + to_str(depth) + " -> " + to_str(depth + 1));
+    if (depth++ >= MAX_DEPTH) { throw RuntimeError("Scope stack overflow, max depth is " + to_str(MAX_DEPTH)); }
     scopes.push_back({});
-    depth++;
 }
 
 void Scope::pop()
 {
     LOG_DEBUG("Popping scope at depth " + to_str(depth) + " -> " + to_str(depth - 1));
+    if (depth-- <= 0) { throw RuntimeError("Scope stack underflow, can't go below 0"); }
     scopes.pop_back();
-    depth--;
 }
 
 void Scope::add(const String& name, Node* node)

@@ -11,6 +11,8 @@
 namespace funk
 {
 
+class BlockNode;
+
 class FunctionNode : public Node
 {
 public:

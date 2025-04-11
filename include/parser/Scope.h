@@ -3,6 +3,7 @@
 #include "ast/Node.h"
 #include "logging/LogMacros.h"
 #include "utils/Common.h"
+#include "utils/Exception.h"
 
 namespace funk
 {
@@ -11,6 +12,7 @@ class Scope
 {
 public:
     static Scope& instance();
+    static const int MAX_DEPTH = 1000;
 
     void push();
     void pop();
