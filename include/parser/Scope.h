@@ -4,6 +4,7 @@
 #include "logging/LogMacros.h"
 #include "utils/Common.h"
 #include "utils/Exception.h"
+#include "BuiltIn.h"
 
 namespace funk
 {

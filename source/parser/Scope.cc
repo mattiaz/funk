@@ -34,9 +34,13 @@ void Scope::pop()
 
 void Scope::add(const String& name, Node* node)
 {
+    if (BuiltIn::functions.find(name) != BuiltIn::functions.end())
+    {
+        throw RuntimeError(node->get_location(), "Cannot overwrite built-in function: " + name);
+    }
     if (contains_in_current_scope(name)) {
         LOG_DEBUG("Symbol '" + name + "' already declared in the current scope");
-        throw RuntimeError("Variable '" + name + "' already declared in the current scope");
+        throw RuntimeError(node->get_location(), "Variable '" + name + "' already declared in the current scope");
     }
     LOG_DEBUG("Registering symbol '" + name + "' with node " + node->to_s());
     scopes.back()[name] = node;
