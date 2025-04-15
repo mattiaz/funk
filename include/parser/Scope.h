@@ -20,6 +20,7 @@ public:
     void add(const String& name, Node* node);
     Node* get(const String& name) const;
     bool contains(const String& name) const;
+    bool contains_in_current_scope(const String& name) const;
 
 private:
     Scope();

@@ -34,6 +34,10 @@ void Scope::pop()
 
 void Scope::add(const String& name, Node* node)
 {
+    if (contains_in_current_scope(name)) {
+        LOG_DEBUG("Symbol '" + name + "' already declared in the current scope");
+        throw RuntimeError("Variable '" + name + "' already declared in the current scope");
+    }
     LOG_DEBUG("Registering symbol '" + name + "' with node " + node->to_s());
     scopes.back()[name] = node;
 }
@@ -60,6 +64,11 @@ bool Scope::contains(const String& name) const
         if (scopes[i].find(name) != scopes[i].end()) { return true; }
     }
     return false;
+}
+bool Scope::contains_in_current_scope(const String& name) const
+{
+    if (scopes.empty()) return false;
+    return scopes.back().find(name) != scopes.back().end();
 }
 
 } // namespace funk
