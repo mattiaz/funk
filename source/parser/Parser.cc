@@ -13,15 +13,18 @@ Node* Parser::parse(const Vector<String>& args)
     BlockNode* block = new BlockNode(SourceLocation(filename, 0, 0));
 
     LOG_DEBUG("Parsing arguments");
+    if (!args.empty())
+    {
+        // Create a Vector of ExpressionNodes for the arguments
+        Vector<ExpressionNode*> list{};
+        // Populate the Vector with LiteralNodes
+        for (const String& arg : args) { list.push_back(new LiteralNode(SourceLocation(filename, 0, 0), arg)); }
+        // Create a ListNode for the arguments
+        ExpressionNode* args_list{new ListNode(SourceLocation(filename, 0, 0), TokenType::TEXT, list)};
+        // Create a DeclarationNode for the arguments
+        block->add(new DeclarationNode(SourceLocation(filename, 0, 0), true, TokenType::TEXT, "ARGS", args_list));
+    }
 
-    // Create a Vector of ExpressionNodes for the arguments
-    Vector<ExpressionNode*> list{};
-    // Populate the Vector with LiteralNodes
-    for (const String& arg : args) { list.push_back(new LiteralNode(SourceLocation(filename, 0, 0), arg)); }
-    // Create a ListNode for the arguments
-    ExpressionNode* args_list{new ListNode(SourceLocation(filename, 0, 0), TokenType::TEXT, list)};
-    // Create a DeclarationNode for the arguments
-    block->add(new DeclarationNode(SourceLocation(filename, 0, 0), true, TokenType::TEXT, "ARGS", args_list));
     // Parse the rest of the program
     while (!done()) { block->add(parse_statement()); }
     return block;
