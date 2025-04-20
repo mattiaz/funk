@@ -17,6 +17,7 @@ String token_type_to_s(TokenType token)
     case TokenType::CASE: return "CASE";
     case TokenType::NONE: return "NONE";
     case TokenType::RETURN: return "RETURN";
+    case TokenType::INCLUDE: return "INCLUDE";
 
     case TokenType::NUMB: return "NUMB";
     case TokenType::REAL: return "REAL";

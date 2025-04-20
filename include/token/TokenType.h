@@ -20,16 +20,17 @@ namespace funk
 enum class TokenType
 {
     // Keywords
-    FUNK,   ///< The 'funk' keyword used for function declaration
-    DATA,   ///< The 'data' keyword used for data structure declaration
-    MUT,    ///< The 'mut' keyword used for mutable variable declaration
-    IF,     ///< The 'if' keyword
-    ELSE,   ///< The 'else' keyword
-    WHILE,  ///< The 'while' keyword
-    MATCH,  ///< The 'match' keyword
-    CASE,   ///< The 'case' keyword
-    NONE,   ///< The 'none' keyword
-    RETURN, ///< The 'return' keyword
+    FUNK,    ///< The 'funk' keyword used for function declaration
+    DATA,    ///< The 'data' keyword used for data structure declaration
+    MUT,     ///< The 'mut' keyword used for mutable variable declaration
+    IF,      ///< The 'if' keyword
+    ELSE,    ///< The 'else' keyword
+    WHILE,   ///< The 'while' keyword
+    MATCH,   ///< The 'match' keyword
+    CASE,    ///< The 'case' keyword
+    NONE,    ///< The 'none' keyword
+    RETURN,  ///< The 'return' keyword
+    INCLUDE, ///< The 'include' keyword
 
     // Literals
     NUMB, ///< Whole number literal (integer)

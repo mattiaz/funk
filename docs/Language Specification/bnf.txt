@@ -1,9 +1,12 @@
 <program>       -> <statement>*
 
-<statement>     -> <declaration>
+<statement>     -> <include>
+                | <declaration>
                 | <expression> ';'
                 | <control>
                 | <comment>
+
+<include>        -> 'include' <identifier> ';' | 'include' <text> ';'
 
 <comment>       -> '#' <wildcard>* <newline> | '##' <wildcard>* '##'
 

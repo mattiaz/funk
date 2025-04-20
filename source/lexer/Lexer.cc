@@ -14,6 +14,7 @@ static const HashMap<String, TokenType> keywords = {
     {"case", TokenType::CASE},
     {"none", TokenType::NONE},
     {"return", TokenType::RETURN},
+    {"include", TokenType::INCLUDE},
 
     {"numb", TokenType::NUMB_TYPE},
     {"real", TokenType::REAL_TYPE},
