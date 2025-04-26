@@ -10,6 +10,7 @@
 #include "ast/Node.h"
 #include "ast/control/IfNode.h"
 #include "ast/control/WhileNode.h"
+#include "ast/declaration/AssignmentNode.h"
 #include "ast/declaration/DeclarationNode.h"
 #include "ast/declaration/VariableNode.h"
 #include "ast/expression/BinaryOpNode.h"

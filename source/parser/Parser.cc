@@ -204,7 +204,20 @@ Node* Parser::parse_expression()
 Node* Parser::parse_assignment()
 {
     LOG_DEBUG("Parse assignment");
-    return parse_logical_or();
+    Node* left{parse_logical_or()};
+    if (auto var = dynamic_cast<VariableNode*>(left))
+    {
+        if (match(TokenType::ASSIGN))
+        {
+            Token op{peek_prev()};
+            ExpressionNode* right{dynamic_cast<ExpressionNode*>(parse_logical_or())};
+            if (!left) { throw SyntaxError(peek().get_location(), "Expected expression before '='"); }
+            if (!right) { throw SyntaxError(peek().get_location(), "Expected expression after '='"); }
+            return new AssignmentNode(var, op, right);
+        }
+    }
+
+    return left;
 }
 
 Node* Parser::parse_logical_or()
