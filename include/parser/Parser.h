@@ -17,6 +17,7 @@
 #include "ast/expression/ListNode.h"
 #include "ast/expression/LiteralNode.h"
 #include "ast/expression/MethodCallNode.h"
+#include "ast/expression/PipeNode.h"
 #include "ast/expression/UnaryOpNode.h"
 #include "ast/expression/VariableNode.h"
 #include "lexer/Lexer.h"
@@ -111,6 +112,13 @@ private:
     bool check(TokenType type) const;
 
     /**
+     * @brief Checks if the next token is of the expected type
+     * @param type The token type to check for
+     * @return bool True if the next token matches the expected type
+     */
+    bool check_next(TokenType type) const;
+
+    /**
      * @brief Checks if the current token matches the expected type, and advances if it does
      * @param expected The token type to check for
      * @return bool True if the current token matched and the index was advanced
@@ -128,6 +136,18 @@ private:
      * @return Node* The AST node representing the declaration
      */
     Node* parse_declaration();
+
+    /**
+     * @brief Parses a variable declaration
+     * @return Node* The AST node representing the variable declaration
+     */
+    Node* parse_variable_declaration(bool is_mutable);
+
+    /**
+     * @brief Parses a function declaration
+     * @return Node* The AST node representing the function declaration
+     */
+    Node* parse_function_declaration(bool is_mutable);
 
     /**
      * @brief Parses a block of statements
@@ -154,6 +174,12 @@ private:
     Node* parse_while();
 
     /**
+     * @brief Parses a return statement
+     * @return Node* The AST node representing the return statement
+     */
+    Node* parse_return();
+
+    /**
      * @brief Parses an expression
      * @return Node* The AST node representing the expression
      */
@@ -164,6 +190,12 @@ private:
      * @return Node* The AST node representing the assignment
      */
     Node* parse_assignment();
+
+    /**
+     * @brief Parses a pipe expression
+     * @return Node* The AST node representing the pipe expression
+     */
+    Node* parse_pipe();
 
     /**
      * @brief Parses a logical OR expression
