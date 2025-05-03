@@ -1,7 +1,7 @@
 #pragma once
-#include "ast/declaration/VariableNode.h"
 #include "ast/expression/CallNode.h"
 #include "ast/expression/ListNode.h"
+#include "ast/expression/VariableNode.h"
 #include "logging/LogMacros.h"
 
 namespace funk

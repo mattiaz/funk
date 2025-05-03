@@ -1,4 +1,4 @@
-#include "ast/declaration/AssignmentNode.h"
+#include "ast/expression/AssignmentNode.h"
 
 namespace funk
 {
