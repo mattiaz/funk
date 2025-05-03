@@ -1,2 +1,4 @@
-numb test = 5;
+mut numb test = 5;
+test = 4;
+test = "hej";
 print(test);

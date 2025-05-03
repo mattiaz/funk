@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ast/BlockNode.h"
-#include "ast/declaration/VariableNode.h"
 #include "ast/expression/ExpressionNode.h"
+#include "ast/expression/VariableNode.h"
 #include "parser/BuiltIn.h"
 #include "parser/Registry.h"
 #include "parser/Scope.h"

@@ -312,13 +312,13 @@ Node* Parser::parse_assignment()
     LOG_DEBUG("Parse assignment");
 
     Node* expr{parse_pipe()};
-    if (auto var = dynamic_cast<VariableNode*>(left))
+    if (auto var = dynamic_cast<VariableNode*>(expr))
     {
         if (match(TokenType::ASSIGN))
         {
             Token op{peek_prev()};
-            ExpressionNode* right{dynamic_cast<ExpressionNode*>(parse_logical_or())};
-            if (!left) { throw SyntaxError(peek().get_location(), "Expected expression before '='"); }
+            ExpressionNode* right{dynamic_cast<ExpressionNode*>(parse_pipe())};
+            if (!expr) { throw SyntaxError(peek().get_location(), "Expected expression before '='"); }
             if (!right) { throw SyntaxError(peek().get_location(), "Expected expression after '='"); }
             return new AssignmentNode(var, op, right);
         }
