@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ast/Node.h"
-#include "ast/declaration/VariableNode.h"
 #include "ast/expression/LiteralNode.h"
+#include "ast/expression/VariableNode.h"
 #include "parser/Scope.h"
 #include "token/Token.h"
 

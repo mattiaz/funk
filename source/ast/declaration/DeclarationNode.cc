@@ -4,8 +4,8 @@ namespace funk
 {
 DeclarationNode::DeclarationNode(const SourceLocation& location, bool is_mutable, TokenType type,
     const String& identifier, ExpressionNode* initializer) :
-    Node{location}, is_mutable{is_mutable}, type{type}, identifier{identifier}, initializer{initializer},
-    has_initializer{true}
+    Node{location}, is_mutable{is_mutable}, type{type_token_to_value_token(type)}, identifier{identifier},
+    initializer{initializer}, has_initializer{true}
 {
 }
 
@@ -53,8 +53,20 @@ Node* DeclarationNode::evaluate() const
         throw RuntimeError(get_location(), "Failed to evaluate initializer for '" + identifier + "'");
     }
 
+    if (has_initializer)
+    {
+        TokenType value_type = initial_value->get_value().get_token_type();
+        if (value_type != type)
+        {
+            throw RuntimeError(
+                get_location(), "Initializer for '" + identifier + "' is not type " + token_type_to_s(type));
+        }
+    }
+
     VariableNode* var = new VariableNode(get_location(), identifier, is_mutable, type, initial_value);
+
     Scope::instance().add(identifier, var);
     return var;
 }
+
 } // namespace funk

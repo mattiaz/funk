@@ -1,5 +1,6 @@
 #pragma once
 
+#include "token/TokenType.h"
 #include "utils/Common.h"
 #include "utils/Exception.h"
 #include <cmath>
@@ -100,6 +101,19 @@ public:
      * @return Reference to the underlying variant
      */
     auto& get_variant() const { return value; }
+
+    /**
+     * @brief Gets the TokenType that corresponds to this value's type
+     * @return The corresponding TokenType
+     */
+    TokenType get_token_type() const;
+
+    /**
+     * @brief Checks if the value is of the same type as another NodeValue.
+     * @param other The other NodeValue to compare with
+     * @return True if the types match
+     */
+    bool type_as(const NodeValue& other) const;
 
 private:
     std::variant<int, double, bool, char, String, None> value; ///< The stored value
